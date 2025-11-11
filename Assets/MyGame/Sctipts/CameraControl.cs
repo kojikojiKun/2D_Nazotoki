@@ -6,7 +6,7 @@ public class CameraControl : MonoBehaviour
 {
     [SerializeField] PlayerController m_target; //追跡対象のオブジェクト.
     [SerializeField] private Vector3 offset; //追跡対象からの距離.
-    private bool m_canChasing; //追跡フラグ.
+    private bool m_canChasing = true; //追跡フラグ.
 
     //追跡中止.
     public void StopChase()

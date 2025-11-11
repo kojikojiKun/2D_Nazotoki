@@ -83,6 +83,8 @@ public class PlayerAnimation : MonoBehaviour
     void LandAnim()
     {
         bool isGrounded = m_footCollider.IsGrounded();
+        m_animator.SetBool("isGrounded",isGrounded);
+
         if (m_isGroundedPrev == false)
         {
             if (isGrounded == true)
