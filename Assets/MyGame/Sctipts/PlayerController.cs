@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("プレイヤーの初期位置"), SerializeField] Transform m_startPos;
     [Header("プレイヤーのステータス")]
     [SerializeField] private float m_defSpeed; //通常の移動スピード.
     [SerializeField] private float m_jumpForce; //ジャンプ力.
-    [SerializeField] PlayerColliderDetector m_footCollider; //接地判定.
+    [SerializeField] PlayerColliderDetector m_footCol; //接地判定.
     [SerializeField] CapsuleCollider2D m_characterCollider; //プレイヤーの当たり判定.
 
     private PlayerInput m_playerInput;
@@ -20,8 +21,13 @@ public class PlayerController : MonoBehaviour
     private bool m_pressJump; //ジャンプボタン入力フラグ.
     private bool m_pressCrouch; //しゃがみボタン検知フラグ.
     private bool m_isCrouch; //しゃがみフラグ.
+    private bool m_canStanding; //しゃがみ解除可能フラグ.
+
+    private bool m_hitWall; //壁との接触検知フラグ.
+    private float m_allowedDist; //壁までの距離制限.
 
     public Vector2 InputMove => m_inputMove;
+    public float MoveSpeed => m_moveSpeed;
     public bool PressJump => m_pressJump;
     public bool PressCrouch => m_pressCrouch;
     public bool IsCrouch => m_isCrouch;
@@ -29,11 +35,18 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //必要な要素を参照.
         m_playerInput = GetComponent<PlayerInput>();
         m_rb2D = GetComponent<Rigidbody2D>();
-        m_moveSpeed = m_defSpeed;
         m_defCharColOffset = new Vector2(m_characterCollider.offset.x, m_characterCollider.offset.y);
         m_defCharColSize = new Vector2(m_characterCollider.size.x, m_characterCollider.size.y);
+
+        //移動速度の初期値を保存.
+        m_moveSpeed = m_defSpeed;
+
+        //初期位置に移動させる.
+        if (m_startPos != null)
+            transform.position = m_startPos.position;
     }
 
     // Update is called once per frame
@@ -48,18 +61,38 @@ public class PlayerController : MonoBehaviour
         m_inputMove = context.ReadValue<Vector2>();
     }
 
+    //壁との接触情報を受け取る.
+    public void ComputeWallCheck(bool hitWall,float allowedDist)
+    {
+        m_hitWall = hitWall;
+        m_allowedDist = allowedDist;
+    }
+
     //プレイヤーを移動させる.
     void MovingPlayer()
     {
-        if (m_inputMove.x > 0.3f)
+        if (m_hitWall == false || m_allowedDist > 0)
         {
-            //画面右側に移動.
-            transform.position += new Vector3(m_moveSpeed, 0, 0) * Time.deltaTime;
-        }
-        else if (m_inputMove.x < -0.3)
-        {
-            //画面左側に移動.
-            transform.position += new Vector3(-m_moveSpeed, 0, 0) * Time.deltaTime;
+            Vector2 direcition = Vector2.zero;
+            if (m_inputMove.x > 0.3f)
+            {
+                //移動方向を画面右側にする.
+                direcition = Vector2.right;
+            }
+            else if (m_inputMove.x < -0.3)
+            {
+                //移動方向を画面左側にする.
+                direcition = Vector2.left;
+            }
+
+            //実際の移動距離.
+            float moveDist = m_moveSpeed * Time.deltaTime;
+
+            //壁までの距離制限を反映.
+            float allowedMove = Mathf.Min(moveDist, m_allowedDist);
+
+            //実際に移動させる.
+            transform.position += (Vector3)(direcition * allowedMove);
         }
     }
 
@@ -67,7 +100,7 @@ public class PlayerController : MonoBehaviour
     public void OnJump(InputAction.CallbackContext context)
     {
         //ボタンが押されたとき.
-        if (context.phase == InputActionPhase.Started && m_footCollider.IsGrounded() == true)
+        if (context.phase == InputActionPhase.Started && m_footCol.IsGrounded() == true && m_canStanding==true)
         {
             JumpingPlayer();
 
@@ -88,6 +121,13 @@ public class PlayerController : MonoBehaviour
         m_rb2D.AddForce(Vector2.up * m_jumpForce, ForceMode2D.Impulse);
     }
 
+    //上方向のオブジェクトと接触しているかどうかを受け取る.
+    public void CeilingCheck(bool hitCeiling)
+    {
+        //オブジェクトと接触していればしゃがみ解除できないようにする.
+        m_canStanding = !hitCeiling;
+    }
+
     //しゃがみ入力受け取り.
     public void OnCrouch(InputAction.CallbackContext context)
     {
@@ -106,7 +146,7 @@ public class PlayerController : MonoBehaviour
             m_characterCollider.offset = new Vector2(0f, -0.22f);
             m_characterCollider.size = new Vector2(0.5f, 0.51f);
         }
-        else if (context.phase == InputActionPhase.Started && m_isCrouch == true)
+        else if (context.phase == InputActionPhase.Started && m_isCrouch == true && m_canStanding==true)
         {
             //ボタン入力を検知.
             m_pressCrouch = true;
