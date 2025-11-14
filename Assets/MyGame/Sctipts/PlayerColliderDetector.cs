@@ -55,7 +55,7 @@ public class PlayerColliderDetector : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up, m_upRayLength, m_wallMask);
 
         //シーンビューで可視化.
-        Debug.DrawRay(rayOrigin, Vector2.up*0.5f, Color.red);
+        Debug.DrawRay(rayOrigin, Vector2.up*m_upRayLength, Color.red);
 
         if (hit.collider != null)
         {
@@ -82,7 +82,7 @@ public class PlayerColliderDetector : MonoBehaviour
         //横方向に動いているとき上下にrayを出す.
         if (Mathf.Abs(direction.x) > 0.01f)
         {
-            offset = new Vector2(0, m_playerCol.size.y * 0.4f);
+            offset = new Vector2(0, m_playerCol.size.y * 1f);
         }
 
         //縦方向に動いているとき左右にrayを出す.

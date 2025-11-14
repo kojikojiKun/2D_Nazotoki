@@ -119,6 +119,16 @@ public class PlayerController : MonoBehaviour
     {
         //上方向にm_jumpForceの力を加える.
         m_rb2D.AddForce(Vector2.up * m_jumpForce, ForceMode2D.Impulse);
+
+        //しゃがみ状態解除.
+        m_isCrouch = false;
+
+        //しゃがみ解除で移動速度を元に戻す.
+        m_moveSpeed = m_defSpeed;
+
+        //プレイヤーコライダーのパラメータを初期値に戻す.
+        m_characterCollider.offset = new Vector2(m_defCharColOffset.x, m_defCharColOffset.y);
+        m_characterCollider.size = new Vector2(m_defCharColSize.x, m_defCharColSize.y);
     }
 
     //上方向のオブジェクトと接触しているかどうかを受け取る.
