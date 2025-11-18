@@ -1,0 +1,97 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerAnimation : MonoBehaviour
+{
+    [SerializeField] GameObject m_player;
+    [SerializeField] Animator m_animator;
+    [SerializeField] PlayerController m_playerController;
+    [SerializeField] PlayerColliderDetector m_footCollider;
+
+    private Vector2 m_inputMove; //入力値.
+    private float m_moveSpeedX; //x軸方向の移動速度.
+    private bool m_isJumping;
+    private bool m_isGroundedPrev;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        RunAnim();
+        CrouchAnim();
+        JumpAnim();
+        LandAnim();
+    }
+
+    //走るアニメーション再生.
+    void RunAnim()
+    {
+        m_inputMove = m_playerController.InputMove; //入力値を取得.
+
+        if (m_inputMove.x > 0.5f)
+        {
+            //キャラクターに右を向かせる.
+            transform.localRotation = Quaternion.Euler(0, 90, 0);
+        }
+        else if (m_inputMove.x < -0.5f)
+        {
+            //キャラクターに左を向かせる.
+            transform.localRotation = Quaternion.Euler(0, -90, 0);
+        }
+
+        //左右どちらかの移動入力がされているとき.
+        if (m_inputMove.x > 0.5f || m_inputMove.x < -0.5f)
+        {
+            //アニメーターにフラグを渡す.
+            m_animator.SetBool("moving", true);
+        }
+        //移動入力がされていないとき.
+        else if (m_inputMove.x < 0.5f || m_inputMove.x > -0.5f)
+        {
+            //アニメーターにフラグを渡す.
+            m_animator.SetBool("moving", false);
+        }
+    }
+
+    //しゃがみアニメーションを再生.
+    void CrouchAnim()
+    {
+        m_animator.SetBool("isCrouch", m_playerController.IsCrouch);
+    }
+
+    //ジャンプアニメーション再生.
+    void JumpAnim()
+    {
+        if (m_playerController.PressJump == false)
+        {
+            m_isJumping = false;
+        }
+
+        if (m_playerController.PressJump == true && m_isJumping == false)
+        {
+            m_animator.SetTrigger("jump");
+            m_isJumping = true;
+        }
+    }
+
+    //着地アニメーションを再生.
+    void LandAnim()
+    {
+        bool isGrounded = m_footCollider.IsGrounded();
+        m_animator.SetBool("isGrounded",isGrounded);
+
+        if (m_isGroundedPrev == false)
+        {
+            if (isGrounded == true)
+            {
+                m_animator.SetTrigger("land");
+            }
+        }
+        m_isGroundedPrev = isGrounded;
+    }
+}

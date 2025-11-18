@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4d1d6303c02103a438d48c15af2c1bee
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323032
+  packageName: KAWAII ANIMATIONS Cool Action
+  packageVersion: 1.2.0
+  assetPath: Assets/KAWAII_ANIMATIOMS_CoolAction/Demo/Animator Controller/Sample_Walk1.controller
+  uploadId: 788658

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 8df651f6ffdc2454e9c4528fefd1beb8
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323032
+  packageName: KAWAII ANIMATIONS Cool Action
+  packageVersion: 1.2.0
+  assetPath: Assets/KAWAII_ANIMATIOMS_CoolAction/Demo/Animator Controller/Sample_A_JumpOver_Fwd.controller
+  uploadId: 788658
