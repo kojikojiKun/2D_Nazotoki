@@ -7,11 +7,11 @@ public class PlayerAnimation : MonoBehaviour
     [SerializeField] GameObject m_player;
     [SerializeField] Animator m_animator;
     [SerializeField] PlayerController m_playerController;
-    [SerializeField] PlayerColliderDetector m_footCollider;
 
     private Vector2 m_inputMove; //入力値.
     private float m_moveSpeedX; //x軸方向の移動速度.
     private bool m_isJumping;
+    private bool m_isGrounded;
     private bool m_isGroundedPrev;
 
     // Start is called before the first frame update
@@ -79,19 +79,24 @@ public class PlayerAnimation : MonoBehaviour
         }
     }
 
+    //接触判定を受け取る.
+    public void IsGroundCheck(bool isGrounded)
+    {
+        m_isGrounded = isGrounded;
+    }
+
     //着地アニメーションを再生.
     void LandAnim()
     {
-        bool isGrounded = m_footCollider.IsGrounded();
-        m_animator.SetBool("isGrounded",isGrounded);
+        m_animator.SetBool("isGrounded", m_isGrounded);
 
         if (m_isGroundedPrev == false)
         {
-            if (isGrounded == true)
+            if (m_isGrounded == true)
             {
                 m_animator.SetTrigger("land");
             }
         }
-        m_isGroundedPrev = isGrounded;
+        m_isGroundedPrev = m_isGrounded;
     }
 }

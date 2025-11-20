@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     [Header("プレイヤーのステータス")]
     [SerializeField] private float m_defSpeed; //通常の移動スピード.
     [SerializeField] private float m_jumpForce; //ジャンプ力.
-    [SerializeField] PlayerColliderDetector m_footCol; //接地判定.
+    [SerializeField] PlayerColliderDetector m_colDetect; //接地判定,壁との接触判定,天井との接触判定.
     [SerializeField] CapsuleCollider2D m_characterCollider; //プレイヤーの当たり判定.
 
     private PlayerInput m_playerInput;
@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private bool m_pressCrouch; //しゃがみボタン検知フラグ.
     private bool m_isCrouch; //しゃがみフラグ.
     private bool m_canStanding; //しゃがみ解除可能フラグ.
+    private bool m_isGrounded; //接地フラグ.
 
     private bool m_hitWall; //壁との接触検知フラグ.
     private float m_allowedDist; //壁までの距離制限.
@@ -73,7 +74,7 @@ public class PlayerController : MonoBehaviour
     {
         if (m_hitWall == false || m_allowedDist > 0)
         {
-            Vector2 direcition = Vector2.zero;
+           /* Vector2 direcition = Vector2.zero;
             if (m_inputMove.x > 0.3f)
             {
                 //移動方向を画面右側にする.
@@ -84,23 +85,62 @@ public class PlayerController : MonoBehaviour
                 //移動方向を画面左側にする.
                 direcition = Vector2.left;
             }
+            */
+
+            //入力値から速度ベクトルを作る.
+            Vector2 velocity = m_inputMove * m_moveSpeed;
+
+            //次のフレームの地面が歩けるかどうかを求める.
+            Vector2 nextPos = (Vector2)transform.position + velocity * Time.deltaTime;
+            if (m_colDetect.CanStepSlope(nextPos) == false)
+            {
+                //地面の斜面が急なら移動を止める.
+                velocity.x = 0f;
+            }
 
             //実際の移動距離.
-            float moveDist = m_moveSpeed * Time.deltaTime;
+            float moveDist = velocity.magnitude * Time.deltaTime;
 
             //壁までの距離制限を反映.
             float allowedMove = Mathf.Min(moveDist, m_allowedDist);
 
+            Vector2 direction = velocity.normalized;
+
             //実際に移動させる.
-            transform.position += (Vector3)(direcition * allowedMove);
+            transform.position += (Vector3)(direction * allowedMove);
         }
+    }
+
+    //急斜面の上ならプレイヤーを滑らせる.
+    public void SlideDown(Vector2 slide)
+    {
+        float slidePower = 20f;
+
+        // 空中に飛び上がらないように、Y成分だけ落とす手もある
+        slide = slide.normalized;
+
+        if (slide.y > 0f)
+        {
+            slide.y = 0f;
+        }
+
+        // 加速しすぎ防止
+        if (m_rb2D.velocity.magnitude < 6f)
+        {
+            m_rb2D.AddForce(slide * slidePower, ForceMode2D.Force);
+        }
+    }
+
+    public void IsGroundCheck(bool isGrounded)
+    {
+        m_isGrounded = isGrounded;
     }
 
     //ジャンプ入力受け取り.
     public void OnJump(InputAction.CallbackContext context)
     {
         //ボタンが押されたとき.
-        if (context.phase == InputActionPhase.Started && m_footCol.IsGrounded() == true && m_canStanding==true)
+        if (context.phase == InputActionPhase.Started && m_isGrounded==true && m_canStanding==true)
         {
             JumpingPlayer();
 
