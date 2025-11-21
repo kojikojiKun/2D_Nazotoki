@@ -9,7 +9,7 @@ public class PlayerColliderDetector : MonoBehaviour
 
     [Header("壁との接触判定")]
     [SerializeField] LayerMask m_wallMask; //壁のレイヤー.
-    [SerializeField, Range(0.01f, 0.2f)] private float m_skinWidth; //壁との余白.
+    [SerializeField, Range(0.01f, 1f)] private float m_skinWidth; //壁との余白.
     [SerializeField, Range(0.1f, 1f)] private float m_upRayLength; //上に向かって飛ばすrayの長さ.
     [SerializeField] CapsuleCollider2D m_playerCol; //プレイヤーのコライダー.
     [SerializeField] Rigidbody2D m_playerRb2D; //プレイヤーのrigidBody
@@ -19,15 +19,15 @@ public class PlayerColliderDetector : MonoBehaviour
     [SerializeField] float m_boxRayLength; //boxRaycastを飛ばす距離.
     [SerializeField] Vector3 m_offset;
     [SerializeField] LayerMask m_groundMask; //地面のレイヤー.
-
-    [Header("地面の角度を判定")]
-    [SerializeField] float m_maxSlopeAngle; //プレイヤーが滑り落ちる地面の角度.
-    [SerializeField] Vector2 m_groundCheckSize;
-    [SerializeField] float m_groundCheckDist;
+    [SerializeField] private float m_maxSlopeAngle = 45f; // これ以上の傾斜は壁扱い.
 
     Vector2 m_move;
     private bool m_isGrounded; //接地フラグ.
 
+    private void Start()
+    {
+        //Time.timeScale = 0.5f;
+    }
     private void Update()
     {
         CeilingDetect();
@@ -56,23 +56,18 @@ public class PlayerColliderDetector : MonoBehaviour
 
         if (hit.collider != null)
         {
-            //法線を取得.
-            Vector2 normal = hit.normal;
-
             //地面の角度を計算.
-            float slopeAngle = Vector2.Angle(normal, Vector2.up);
+            float angle = Vector2.Angle(hit.normal, Vector2.up);
 
-            if (slopeAngle > m_maxSlopeAngle)
-            {
-                //急斜面なら地面扱いしない.
+            
+            if (angle > m_maxSlopeAngle)
+            {   
+                //地面の角度が許容範囲外なら地面扱いしない.
                 m_isGrounded = false;
 
-                Vector2 slide = new Vector2(normal.y, -normal.x);
-                if (slide.y > 0f)
-                {
-                    slide = -slide;
-                }
-                m_player.SlideDown(slide);
+                ///
+                //TODO プレイヤーが滑り落ちるようにする.
+                ///
             }
             else
             {
@@ -88,98 +83,6 @@ public class PlayerColliderDetector : MonoBehaviour
         m_player.IsGroundCheck(m_isGrounded);
         m_playerAnim.IsGroundCheck(m_isGrounded);
     }
-
-    //次のフレームの足元が歩ける場所かどうかをチェック.
-    public bool CanStepSlope(Vector2 nextPos)
-    {
-        //足元にboxCastを飛ばす.
-        RaycastHit2D hit = Physics2D.BoxCast(
-            nextPos, //開始位置.
-            m_groundCheckSize, //大きさ.
-            0f, //角度.
-            Vector2.down, //方向.
-            m_groundCheckDist, //距離.
-            m_groundMask
-        );
-
-        if (hit.collider == null)
-        {
-            return true;
-        }
-
-        Vector2 normal = hit.normal;
-
-        //地面との角度を計算.
-        float slopeAngle = Vector2.Angle(normal, Vector2.up);
-
-        //下りは歩行可能.
-        if (normal.y < 0f)
-        {
-            return true;
-        }
-
-        //上りの角度をが急なら歩行不可能.
-        if (slopeAngle > m_maxSlopeAngle)
-        {
-            return false;
-        }
-
-        //角度が許容範囲内ならtrue
-        return true;
-    }
-
-    private void OnDrawGizmos()
-    {
-        // ================================
-        // ① GroundDetect の BoxCast 描画
-        // ================================
-        Gizmos.color = Color.red;
-
-        Vector2 groundOrigin = (Vector2)transform.position + m_offset;
-
-        // 中心 = origin + 下方向の半分
-        Vector2 groundCenter = groundOrigin + Vector2.down * (m_boxRayLength * 0.5f);
-
-        // サイズ = 元のサイズ + 下方向の長さ
-        Vector3 groundSize = new Vector3(
-            m_boxRaySize.x,
-            m_boxRaySize.y + m_boxRayLength,
-            1f
-        );
-
-        Gizmos.DrawWireCube(groundCenter, groundSize);
-
-
-        // ================================
-        // ② Slope チェックの BoxCast 描画
-        // ================================
-        Gizmos.color = Color.yellow;
-
-        Vector2 slopeOrigin = (Vector2)transform.position;
-
-        // 中心 = origin + 下方向の半分
-        Vector2 slopeCenter = slopeOrigin + Vector2.down * (m_groundCheckDist * 0.5f);
-
-        // サイズ = 元サイズ + 下方向距離
-        Vector3 slopeSize = new Vector3(
-            m_groundCheckSize.x,
-            m_groundCheckSize.y + m_groundCheckDist,
-            1f
-        );
-
-        Gizmos.DrawWireCube(slopeCenter, slopeSize);
-
-
-        // ================================
-        // ③ 参考：Ray の可視化
-        // ================================
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(groundOrigin, groundOrigin + Vector2.down * m_boxRayLength);
-
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(slopeOrigin, slopeOrigin + Vector2.down * m_groundCheckDist);
-    }
-
 
     //頭上のオブジェクトとの接触を判定.
     void CeilingDetect()
@@ -203,6 +106,19 @@ public class PlayerColliderDetector : MonoBehaviour
         m_player.CeilingCheck(hitCeilig);
     }
 
+    //rayと斜面の角度を計算.
+    bool IsWall(RaycastHit2D hit)
+    {
+        if (hit.collider == null) return false;
+
+        // 法線と上方向の角度を計算
+        float angle = Vector2.Angle(hit.normal, Vector2.up);
+
+        // 角度が大きい => 壁
+        return angle > m_maxSlopeAngle;
+    }
+
+
     //プレイヤーの壁すり抜け防止.
     void WallDetect()
     {
@@ -216,17 +132,7 @@ public class PlayerColliderDetector : MonoBehaviour
         //カプセルコライダーの高さ、幅を元にrayのオフセットを決める.
         Vector2 offset = Vector2.zero;
 
-        //横方向に動いているとき上下にrayを出す.
-        if (Mathf.Abs(direction.x) > 0.01f)
-        {
-            offset = new Vector2(0, m_playerCol.size.y * 1f);
-        }
-
-        //縦方向に動いているとき左右にrayを出す.
-        if (Mathf.Abs(m_playerRb2D.velocity.y) > 0.01f)
-        {
-            offset = new Vector2(m_playerCol.size.x * 0.4f, 0);
-        }
+        offset = new Vector2(0, m_playerCol.size.y * 1f);
 
         bool hitWall = false;
         float allowedDist = moveDist;
@@ -239,7 +145,7 @@ public class PlayerColliderDetector : MonoBehaviour
         Debug.DrawRay(rayOrigin + offset, direction * 5, Color.red);
         Debug.DrawRay(rayOrigin - offset, direction * 5, Color.red);
 
-        if (hit1.collider != null)
+        if (hit1.collider != null && IsWall(hit1))
         {
             allowedDist = Mathf.Min(allowedDist, hit1.distance - m_skinWidth);
             hitWall = true;

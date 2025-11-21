@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
     {
         if (m_hitWall == false || m_allowedDist > 0)
         {
-           /* Vector2 direcition = Vector2.zero;
+            Vector2 direcition = Vector2.zero;
             if (m_inputMove.x > 0.3f)
             {
                 //移動方向を画面右側にする.
@@ -85,18 +85,10 @@ public class PlayerController : MonoBehaviour
                 //移動方向を画面左側にする.
                 direcition = Vector2.left;
             }
-            */
-
+            
             //入力値から速度ベクトルを作る.
-            Vector2 velocity = m_inputMove * m_moveSpeed;
+            Vector2 velocity = direcition * m_moveSpeed;
 
-            //次のフレームの地面が歩けるかどうかを求める.
-            Vector2 nextPos = (Vector2)transform.position + velocity * Time.deltaTime;
-            if (m_colDetect.CanStepSlope(nextPos) == false)
-            {
-                //地面の斜面が急なら移動を止める.
-                velocity.x = 0f;
-            }
 
             //実際の移動距離.
             float moveDist = velocity.magnitude * Time.deltaTime;
@@ -104,30 +96,8 @@ public class PlayerController : MonoBehaviour
             //壁までの距離制限を反映.
             float allowedMove = Mathf.Min(moveDist, m_allowedDist);
 
-            Vector2 direction = velocity.normalized;
-
             //実際に移動させる.
-            transform.position += (Vector3)(direction * allowedMove);
-        }
-    }
-
-    //急斜面の上ならプレイヤーを滑らせる.
-    public void SlideDown(Vector2 slide)
-    {
-        float slidePower = 20f;
-
-        // 空中に飛び上がらないように、Y成分だけ落とす手もある
-        slide = slide.normalized;
-
-        if (slide.y > 0f)
-        {
-            slide.y = 0f;
-        }
-
-        // 加速しすぎ防止
-        if (m_rb2D.velocity.magnitude < 6f)
-        {
-            m_rb2D.AddForce(slide * slidePower, ForceMode2D.Force);
+            transform.position += (Vector3)(velocity * allowedMove);
         }
     }
 
