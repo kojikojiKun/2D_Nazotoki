@@ -19,7 +19,7 @@ public class PlayerColliderDetector : MonoBehaviour
     [SerializeField] float m_boxRayLength; //boxRaycastを飛ばす距離.
     [SerializeField] Vector3 m_offset;
     [SerializeField] LayerMask m_groundMask; //地面のレイヤー.
-    [SerializeField] private float m_maxSlopeAngle = 45f; // これ以上の傾斜は壁扱い.
+    [SerializeField] private float m_maxSlopeAngle; // これ以上の傾斜は壁扱い.
 
     Vector2 m_move;
     private bool m_isGrounded; //接地フラグ.
@@ -56,18 +56,36 @@ public class PlayerColliderDetector : MonoBehaviour
 
         if (hit.collider != null)
         {
-            //地面の角度を計算.
-            float angle = Vector2.Angle(hit.normal, Vector2.up);
+            Vector2 normal = hit.normal;
 
-            
-            if (angle > m_maxSlopeAngle)
-            {   
+            //法線を上向きに補正.
+            if (normal.y < 0)
+            {
+                normal = -normal;
+            }
+
+            float angle = Vector2.Angle(normal, Vector2.up);
+            Debug.Log(angle);
+            if (angle < 5f)
+            {
+                m_player.ReceiveSlopeDirection(Vector2.zero, 0);
+            }
+
+            if (angle >= m_maxSlopeAngle)
+            {
+                //地面の角度を計算.
+                Vector2 slopeDir = Vector2.Perpendicular(hit.normal);
+
+                if (Vector2.Dot(slopeDir, Vector2.down) < 0f)
+                {
+                    slopeDir = -slopeDir; //下方向に反転.
+                }
+
+                //プレイヤーに地面の角度を渡す.
+                m_player.ReceiveSlopeDirection(slopeDir, angle);
+
                 //地面の角度が許容範囲外なら地面扱いしない.
                 m_isGrounded = false;
-
-                ///
-                //TODO プレイヤーが滑り落ちるようにする.
-                ///
             }
             else
             {
@@ -76,6 +94,9 @@ public class PlayerColliderDetector : MonoBehaviour
         }
         else
         {
+            //接地していなければslopeDirリセット.
+            m_player.ReceiveSlopeDirection(Vector2.zero, 0);
+
             m_isGrounded = false;
         }
 

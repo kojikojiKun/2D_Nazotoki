@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [Header("プレイヤーのステータス")]
     [SerializeField] private float m_defSpeed; //通常の移動スピード.
     [SerializeField] private float m_jumpForce; //ジャンプ力.
+    [SerializeField] private float m_slideSpeed; //滑り落ちるときのスピード.
     [SerializeField] PlayerColliderDetector m_colDetect; //接地判定,壁との接触判定,天井との接触判定.
     [SerializeField] CapsuleCollider2D m_characterCollider; //プレイヤーの当たり判定.
 
@@ -17,7 +18,10 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D m_rb2D;
     private Vector2 m_inputMove; //入力値.
 
+    private Vector2 m_slopeDir; //地面の角度ベクトル.
+    private float m_slopeAngle; //地面の角度.
     private float m_moveSpeed; //反映する移動スピード.
+    private float m_groundAngle; //地面の角度.
     private bool m_pressJump; //ジャンプボタン入力フラグ.
     private bool m_pressCrouch; //しゃがみボタン検知フラグ.
     private bool m_isCrouch; //しゃがみフラグ.
@@ -54,6 +58,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         MovingPlayer();
+        SlidePlayer();
     }
 
     //移動入力受け取り.
@@ -101,6 +106,36 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //地面の角度を受け取る.
+    public void ReceiveSlopeDirection(Vector2 slopeDir, float slopeAngle)
+    {
+        m_slopeDir = slopeDir;
+        m_slopeAngle = slopeAngle;
+    }
+
+    //地面の角度が許容範囲外なら滑り落ちる.
+    void SlidePlayer()
+    {
+        if (m_slopeDir == Vector2.zero)
+        {
+            return;
+        }
+
+        Vector2 slideVelocity = m_slopeDir * m_slideSpeed;
+        transform.position += (Vector3)(slideVelocity * Time.deltaTime);
+
+        //slopeAngleが90になる瞬間→傾斜を下りきったとき.
+        if (Mathf.Abs(m_slopeAngle - 90f) < 0.1f)
+        {
+            //傾斜の方向に少し押し出す.
+            float nudge = 0.05f;
+            Vector3 offset = new Vector3(Mathf.Sign(m_slopeDir.x) * nudge, 0f, 0f);
+
+            transform.position += offset;
+        }
+    }
+
+    //接地判定を受け取る.
     public void IsGroundCheck(bool isGrounded)
     {
         m_isGrounded = isGrounded;
@@ -160,7 +195,7 @@ public class PlayerController : MonoBehaviour
             m_isCrouch = true;
 
             //しゃがみ中は移動速度低下.
-            m_moveSpeed = m_defSpeed * 0.5f;
+            m_moveSpeed = m_defSpeed * 0.7f;
 
             //キャラクターの姿勢にコライダーを合わせる
             m_characterCollider.offset = new Vector2(0f, -0.22f);
