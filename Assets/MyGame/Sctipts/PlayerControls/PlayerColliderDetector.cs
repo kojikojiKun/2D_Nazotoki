@@ -65,7 +65,7 @@ public class PlayerColliderDetector : MonoBehaviour
             }
 
             float angle = Vector2.Angle(normal, Vector2.up);
-            Debug.Log(angle);
+
             if (angle < 5f)
             {
                 m_player.ReceiveSlopeDirection(Vector2.zero, 0);
@@ -74,13 +74,14 @@ public class PlayerColliderDetector : MonoBehaviour
             if (angle >= m_maxSlopeAngle)
             {
                 //’n–Ê‚ÌŠp“x‚ðŒvŽZ.
-                Vector2 slopeDir = Vector2.Perpendicular(hit.normal);
+                Vector2 slopeDir = new Vector2(normal.y, -normal.x);
 
                 if (Vector2.Dot(slopeDir, Vector2.down) < 0f)
                 {
                     slopeDir = -slopeDir; //‰º•ûŒü‚É”½“].
                 }
 
+                Debug.Log($"slopeDir{slopeDir}");
                 //ƒvƒŒƒCƒ„[‚É’n–Ê‚ÌŠp“x‚ð“n‚·.
                 m_player.ReceiveSlopeDirection(slopeDir, angle);
 
@@ -89,6 +90,7 @@ public class PlayerColliderDetector : MonoBehaviour
             }
             else
             {
+                m_player.ReceiveSlopeDirection(Vector2.zero, angle);
                 m_isGrounded = true;
             }
         }

@@ -21,7 +21,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 m_slopeDir; //地面の角度ベクトル.
     private float m_slopeAngle; //地面の角度.
     private float m_moveSpeed; //反映する移動スピード.
-    private float m_groundAngle; //地面の角度.
+    private float m_lastSlope
+    private bool m_inSlope; //地面の角度が急か.
     private bool m_pressJump; //ジャンプボタン入力フラグ.
     private bool m_pressCrouch; //しゃがみボタン検知フラグ.
     private bool m_isCrouch; //しゃがみフラグ.
@@ -77,7 +78,13 @@ public class PlayerController : MonoBehaviour
     //プレイヤーを移動させる.
     void MovingPlayer()
     {
-        if (m_hitWall == false || m_allowedDist > 0)
+        if (m_inSlope == true)
+        {
+            return;
+        }
+
+        if (m_hitWall == false || //移動方向に壁がない.
+            m_allowedDist > 0 ) //移動可能距離が0以上.
         {
             Vector2 direcition = Vector2.zero;
             if (m_inputMove.x > 0.3f)
@@ -90,7 +97,7 @@ public class PlayerController : MonoBehaviour
                 //移動方向を画面左側にする.
                 direcition = Vector2.left;
             }
-            
+
             //入力値から速度ベクトルを作る.
             Vector2 velocity = direcition * m_moveSpeed;
 
@@ -118,8 +125,12 @@ public class PlayerController : MonoBehaviour
     {
         if (m_slopeDir == Vector2.zero)
         {
+            m_inSlope = false;
             return;
         }
+
+        //地面の角度が急ならtrue.
+        m_inSlope = true;
 
         Vector2 slideVelocity = m_slopeDir * m_slideSpeed;
         transform.position += (Vector3)(slideVelocity * Time.deltaTime);
