@@ -19,9 +19,10 @@ public class PlayerColliderDetector : MonoBehaviour
     [SerializeField] float m_boxRayLength; //boxRaycastを飛ばす距離.
     [SerializeField] Vector3 m_offset;
     [SerializeField] LayerMask m_groundMask; //地面のレイヤー.
-    [SerializeField] private float m_maxSlopeAngle; // これ以上の傾斜は壁扱い.
+    [SerializeField] private float m_maxProceedAngle; //プレイヤーが歩ける地面の角度.
 
     Vector2 m_move;
+    private bool m_inSlope;
     private bool m_isGrounded; //接地フラグ.
 
     private void Start()
@@ -63,43 +64,54 @@ public class PlayerColliderDetector : MonoBehaviour
             {
                 normal = -normal;
             }
-
-            float angle = Vector2.Angle(normal, Vector2.up);
-
-            if (angle < 5f)
+            //角度計算+角度を常に0～90度に正規化.
+            float angle = Vector2.Angle(normal, Vector2.up);        
+            if (angle > 90f)
             {
-                m_player.ReceiveSlopeDirection(Vector2.zero, 0);
+                angle = 180f - angle;
             }
 
-            if (angle >= m_maxSlopeAngle)
+            //角度が小さすぎる場合は平面と同じ扱い.
+            if (angle < 5f)
             {
+                m_inSlope = false;
+                m_player.ReceiveSlopeDirection(Vector2.zero, 0, m_inSlope);
+            }
+
+            //急斜面→滑り落ちる.
+            if (angle >= m_maxProceedAngle)
+            {
+                m_inSlope = true;
+
                 //地面の角度を計算.
                 Vector2 slopeDir = new Vector2(normal.y, -normal.x);
 
+                //ベクトルが上方向に向いていたら下方向に補正する.
                 if (Vector2.Dot(slopeDir, Vector2.down) < 0f)
                 {
                     slopeDir = -slopeDir; //下方向に反転.
                 }
 
-                Debug.Log($"slopeDir{slopeDir}");
-                //プレイヤーに地面の角度を渡す.
-                m_player.ReceiveSlopeDirection(slopeDir, angle);
+                slopeDir.Normalize();
 
-                //地面の角度が許容範囲外なら地面扱いしない.
-                m_isGrounded = false;
+                //プレイヤーに地面の角度を渡す.
+                m_player.ReceiveSlopeDirection(slopeDir, angle, m_inSlope);
             }
             else
             {
-                m_player.ReceiveSlopeDirection(Vector2.zero, angle);
-                m_isGrounded = true;
+                m_inSlope = false;
+                m_player.ReceiveSlopeDirection(Vector2.zero, angle, m_inSlope);
             }
+            m_isGrounded = true;
         }
         else
         {
-            //接地していなければslopeDirリセット.
-            m_player.ReceiveSlopeDirection(Vector2.zero, 0);
-
+            m_inSlope = false;
             m_isGrounded = false;
+
+            //接地していなければslopeDirリセット.
+            m_player.ReceiveSlopeDirection(Vector2.zero, 0, m_inSlope);
+
         }
 
         //プレイヤーとプレイヤーのアニメーション管理スクリプトに接地判定を渡す.
@@ -138,7 +150,7 @@ public class PlayerColliderDetector : MonoBehaviour
         float angle = Vector2.Angle(hit.normal, Vector2.up);
 
         // 角度が大きい => 壁
-        return angle > m_maxSlopeAngle;
+        return angle > m_maxProceedAngle;
     }
 
 
@@ -170,13 +182,21 @@ public class PlayerColliderDetector : MonoBehaviour
 
         if (hit1.collider != null && IsWall(hit1))
         {
-            allowedDist = Mathf.Min(allowedDist, hit1.distance - m_skinWidth);
             hitWall = true;
+
+            if (hitWall == true)
+            {
+                //移動可能距離を計算.
+                allowedDist = Mathf.Min(allowedDist, hit1.distance - m_skinWidth);
+            }
         }
-        if (hit2.collider != null)
+        if (hit2.collider != null && IsWall(hit2))
         {
-            allowedDist = Mathf.Min(allowedDist, hit2.distance - m_skinWidth);
             hitWall = true;
+
+            if (hitWall == true)
+                //移動可能距離を計算.
+                allowedDist = Mathf.Min(allowedDist, hit2.distance - m_skinWidth);
         }
 
         //プレイヤーに壁との接触情報を渡す.

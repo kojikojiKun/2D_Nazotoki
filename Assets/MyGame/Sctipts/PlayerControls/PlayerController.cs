@@ -18,17 +18,17 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D m_rb2D;
     private Vector2 m_inputMove; //入力値.
 
-    private Vector2 m_slopeDir; //地面の角度ベクトル.
-    private float m_slopeAngle; //地面の角度.
     private float m_moveSpeed; //反映する移動スピード.
-    private float m_lastSlope
+    private bool m_isGrounded; //接地フラグ. 
+    private Vector2 m_slopeDir; //地面の角度ベクトル.
+    private float m_slopeAngle; //地面の角度.   
+    private float m_lastSlopeSign; //直前の地面の角度の方向を記録.
     private bool m_inSlope; //地面の角度が急か.
     private bool m_pressJump; //ジャンプボタン入力フラグ.
     private bool m_pressCrouch; //しゃがみボタン検知フラグ.
     private bool m_isCrouch; //しゃがみフラグ.
     private bool m_canStanding; //しゃがみ解除可能フラグ.
-    private bool m_isGrounded; //接地フラグ.
-
+   
     private bool m_hitWall; //壁との接触検知フラグ.
     private float m_allowedDist; //壁までの距離制限.
 
@@ -113,34 +113,42 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //地面の角度を受け取る.
-    public void ReceiveSlopeDirection(Vector2 slopeDir, float slopeAngle)
+    //地面の傾きの方向、傾きの大きさを受け取る.
+    public void ReceiveSlopeDirection(Vector2 slopeDir, float slopeAngle,bool inSlope)
     {
         m_slopeDir = slopeDir;
         m_slopeAngle = slopeAngle;
+        m_inSlope = inSlope;
     }
 
     //地面の角度が許容範囲外なら滑り落ちる.
     void SlidePlayer()
     {
-        if (m_slopeDir == Vector2.zero)
+        //地面がないなら滑らない.
+        if(m_isGrounded==false && m_slopeDir == Vector2.zero)
         {
-            m_inSlope = false;
+            m_lastSlopeSign = 0;
             return;
         }
 
-        //地面の角度が急ならtrue.
-        m_inSlope = true;
+        //緩い斜面なら滑らない.
+        if(m_slopeDir==Vector2.zero)
+        {
+            return;
+        }
+
+        //滑っている間だけ方向を記録.
+        m_lastSlopeSign = Mathf.Sign(m_slopeDir.x);
 
         Vector2 slideVelocity = m_slopeDir * m_slideSpeed;
         transform.position += (Vector3)(slideVelocity * Time.deltaTime);
 
         //slopeAngleが90になる瞬間→傾斜を下りきったとき.
-        if (Mathf.Abs(m_slopeAngle - 90f) < 0.1f)
+        if (Mathf.Abs(m_slopeAngle - 90f) < 0.2f && m_isGrounded == true)
         {
             //傾斜の方向に少し押し出す.
             float nudge = 0.05f;
-            Vector3 offset = new Vector3(Mathf.Sign(m_slopeDir.x) * nudge, 0f, 0f);
+            Vector3 offset = new Vector3(m_lastSlopeSign * nudge, 0f, 0f);
 
             transform.position += offset;
         }
