@@ -29,16 +29,13 @@ public class PlayerColliderDetector : MonoBehaviour
     {
         //Time.timeScale = 0.5f;
     }
-    private void Update()
-    {
-        CeilingDetect();
-        WallDetect();
-        GroundDetect();
-    }
 
     private void FixedUpdate()
     {
         m_move = m_player.InputMove.normalized * m_player.MoveSpeed * Time.fixedDeltaTime; //ˆÚ“®“ü—Í‚ðŽæ“¾.
+        CeilingDetect();
+        WallDetect();
+        GroundDetect();
     }
 
     //ƒvƒŒƒCƒ„[‚ÌÚ’n”»’è.
@@ -65,7 +62,7 @@ public class PlayerColliderDetector : MonoBehaviour
                 normal = -normal;
             }
             //Šp“xŒvŽZ+Šp“x‚ðí‚É0`90“x‚É³‹K‰».
-            float angle = Vector2.Angle(normal, Vector2.up);        
+            float angle = Vector2.Angle(normal, Vector2.up);
             if (angle > 90f)
             {
                 angle = 180f - angle;
