@@ -39,6 +39,12 @@ public class FlowTree : MonoBehaviour
         {
             Flow();
         }
+
+        //ƒJƒƒ‰‚É‰f‚ç‚È‚­‚È‚Á‚½‚ç–³Œø‰».
+        if (transform.position.z < -15f)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     //–Ø‚ğ—¬‚·.

@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class WaterFlowTrigger : MonoBehaviour
 {
-    [SerializeField] private float m_delayTime; //移動までの待機時間.
+    [SerializeField] Stage_1Manager m_stageManager;
     [SerializeField] private float m_flowSpeed; //水流の移動スピード
 
+    private float m_delayTime; //移動までの待機時間.
     private float m_passedTime; //経過時間.
+    private bool m_isSetTime = false;
     BaseGimmickCtrl m_gimmickCtrl;
 
     // Start is called before the first frame update
@@ -22,6 +24,13 @@ public class WaterFlowTrigger : MonoBehaviour
         //プレイヤーが正しい天候を選択したとき.
         if (m_gimmickCtrl.IsGimmickActive() == true)
         {
+            //待機時間を受け取る.
+            if (m_isSetTime == false)
+            {
+                m_delayTime = m_stageManager.DelayAppearTime;
+                m_isSetTime = true;
+            }
+
             MoveTrigger();
         }
     }
