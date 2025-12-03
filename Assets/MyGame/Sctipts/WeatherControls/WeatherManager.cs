@@ -6,12 +6,10 @@ using System;
 
 public class WeatherManager : MonoBehaviour
 {
-
-    [SerializeField] ParticleSystem[] m_weatherParticle; //天気のパーティクル.
-
     private int m_currentIndex;
     private WeatherType m_currentWeather;
 
+    public static WeatherManager s_instance { get; private set; }
     public static event Action<WeatherType> OnWeatherChanged; //天候の変化イベント.
     public WeatherType CurrentWeather => m_currentWeather;
     public enum WeatherType
@@ -24,6 +22,13 @@ public class WeatherManager : MonoBehaviour
 
     private void Awake()
     {
+        if (s_instance != null && s_instance != this)
+        {
+            Destroy(s_instance);
+            return;
+        }
+        s_instance = this;
+        
         m_currentWeather = WeatherType.sunny;
         m_currentIndex = (int)m_currentWeather;
     }
@@ -40,11 +45,5 @@ public class WeatherManager : MonoBehaviour
 
         //イベント通知(天候の変化を伝える).
         OnWeatherChanged?.Invoke(m_currentWeather);
-    }
-
-    //天気のパーティクルを再生.
-    void PlayWeatherParticle()
-    {
-        m_weatherParticle[m_currentIndex].Play();
     }
 }

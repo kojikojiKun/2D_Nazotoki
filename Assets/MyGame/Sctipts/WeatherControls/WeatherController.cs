@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class WeatherController : MonoBehaviour
 {
-    [SerializeField] WeatherManager m_weatherManager;
+    WeatherManager m_weatherManager;
     [Header("UIÉzÉCÅ[Éã")]
     [SerializeField] Canvas m_canvas;
     [SerializeField] GameObject m_weatherMenu;
@@ -25,6 +25,7 @@ public class WeatherController : MonoBehaviour
 
     private void Start()
     {
+        m_weatherManager = WeatherManager.s_instance;
         m_playerInput = GetComponent<PlayerInput>();
         m_defWheelScale = m_weatherWheel[0].transform.localScale;
         m_selectedWheelScale = m_defWheelScale * 1.2f;
