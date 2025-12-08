@@ -38,6 +38,11 @@ public class PlayerColliderDetector : MonoBehaviour
         GroundDetect();
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        
+    }
+
     //プレイヤーの接地判定.
     void GroundDetect()
     {

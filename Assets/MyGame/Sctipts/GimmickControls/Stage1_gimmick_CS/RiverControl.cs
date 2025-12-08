@@ -18,7 +18,9 @@ public class RiverControl : MonoBehaviour
     private Vector3 m_goalWaterPos; //目標座標.
     public float DelayAppearTime => m_delayAppearTime;
 
-    private bool m_isAppeard = false;
+    private bool m_isSolved = false; //ギミック解除フラグ.
+    private bool m_isAppeard = false; //水出現フラグ.
+    private bool m_isDisabled = false; //オブジェクト無効フラグ.
 
     private void Start()
     {
@@ -33,25 +35,39 @@ public class RiverControl : MonoBehaviour
 
     private void Update()
     {
-        if (m_gimmickCtrl.IsGimmickActive() == true && m_isAppeard == false)
+        //ギミックが解除されたとき.
+        if (m_gimmickCtrl.IsGimmickActive() == true && m_isSolved == false)
+        {
+            AppearRiver();
+            m_isSolved = true;
+        }
+        Debug.Log($"currentWeather={m_weatherManager.CurrentWeather},{m_isAppeard}");
+        //晴れを選択すると川の水が消える.
+        if (m_isAppeard == true && m_weatherManager.CurrentWeather == WeatherManager.WeatherType.sunny)
+        {
+            DisappearRiver();
+        }
+
+        //雨を選択すると川の水が現れる.
+        if (m_isAppeard == false && m_weatherManager.CurrentWeather == WeatherManager.WeatherType.rainy)
         {
             AppearRiver();
         }
     }
 
-    //障害物を無効にする.
-    void DisableObstacleObject()
-    {
-        m_disableObject.SetActive(false);
-    }
-
     //川に水を出現させる.
     void AppearRiver()
     {
+        if (m_isDisabled == true)
+        {
+            m_disableObject.SetActive(true);
+        }
+
         //delayTime待ってからgoalWaterPosへtravelTimeで移動する.
         m_riverWater.transform.DOMove(m_goalWaterPos, m_travelTime).SetDelay(m_delayAppearTime)
                 .OnComplete(() =>
                 {
+                    DOTween.Kill(m_riverWater.transform);
                     m_isAppeard = true;
                 });
     }
@@ -59,12 +75,21 @@ public class RiverControl : MonoBehaviour
     //水を消滅させる.
     void DisappearRiver()
     {
+        //障害物を消す.
+        DisableObstacleObject();
+
         m_riverWater.transform.DOMove(m_initWaterPos, m_travelTime).SetDelay(m_delayAppearTime)
-                .OnComplete(()=>
+                .OnComplete(() =>
                 {
+                    DOTween.Kill(m_riverWater.transform);
                     m_isAppeard = false;
-                    //移動が完了したら障害物を消す.
-                    DisableObstacleObject();
                 });
+    }
+
+    //障害物を無効にする.
+    void DisableObstacleObject()
+    {
+        m_disableObject.SetActive(false);
+        m_isDisabled = true;
     }
 }

@@ -45,6 +45,7 @@ public class BaseGimmickCtrl : MonoBehaviour
         m_previousCameraState = nowVisible;
     }
 
+    //カメラの範囲内ならtrue
     private bool IsOnScreen()
     {
         Vector3 screenPos = Camera.main.WorldToViewportPoint(transform.position);
@@ -53,12 +54,14 @@ public class BaseGimmickCtrl : MonoBehaviour
             screenPos.y > 0 && screenPos.y < 1;
     }
 
+    //カメラの範囲内に入ったとき.
     private void OnEnterCamera()
     {
         m_isWithinCamera = true;
         TryProgress(m_weatherManager.CurrentWeather);
     }
 
+    //カメラの範囲外に出たとき.
     private void OnExitCamera()
     {
         m_isWithinCamera = false;
@@ -85,6 +88,7 @@ public class BaseGimmickCtrl : MonoBehaviour
 
         var expectedWeather = m_weatherPriorities[m_progress].w_weatherType;
 
+        //天候が一致したら進行度上昇.
         if (weatherType == expectedWeather)
         {
             m_progress++;
