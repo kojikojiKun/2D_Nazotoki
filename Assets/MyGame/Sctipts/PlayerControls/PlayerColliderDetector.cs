@@ -40,7 +40,23 @@ public class PlayerColliderDetector : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if (collision.CompareTag("checkPoint"))
+        {
+            //チェックポイントの座標を渡す.
+            StageManager.s_instance.ReceiveCheckPoint(collision.transform);
+        }
+
+        if (collision.CompareTag("respawnPlayer"))
+        {
+            //プレイヤーをリスポーンさせる.
+            StageManager.s_instance.Respown();
+        }
+
+        if (collision.CompareTag("goal"))
+        {
+            //ステージクリア時の処理を実行する.
+            StageManager.s_instance.ClearStage();
+        }
     }
 
     //プレイヤーの接地判定.

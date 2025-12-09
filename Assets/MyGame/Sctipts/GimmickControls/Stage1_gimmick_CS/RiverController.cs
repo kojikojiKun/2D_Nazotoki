@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class RiverControl : MonoBehaviour
+public class RiverController : MonoBehaviour
 {
     [SerializeField] GameObject m_disableObject; //プレイヤーを通れなくしているオブジェクト.
     [SerializeField] GameObject m_riverWater;
@@ -41,7 +41,7 @@ public class RiverControl : MonoBehaviour
             AppearRiver();
             m_isSolved = true;
         }
-        Debug.Log($"currentWeather={m_weatherManager.CurrentWeather},{m_isAppeard}");
+
         //晴れを選択すると川の水が消える.
         if (m_isAppeard == true && m_weatherManager.CurrentWeather == WeatherManager.WeatherType.sunny)
         {

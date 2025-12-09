@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
 {
-    [SerializeField] GameObject m_player;
-    [SerializeField] Animator m_animator;
-    [SerializeField] PlayerController m_playerController;
+    Animator m_animator;
+    PlayerController m_playerController;
 
     private Vector2 m_inputMove; //“ü—Í’l.
     private float m_moveSpeedX; //xŽ²•ûŒü‚ÌˆÚ“®‘¬“x.
@@ -17,6 +16,8 @@ public class PlayerAnimation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        m_animator=GetComponent<Animator>();
+        m_playerController = GetComponent<PlayerController>();
     }
 
     // Update is called once per frame

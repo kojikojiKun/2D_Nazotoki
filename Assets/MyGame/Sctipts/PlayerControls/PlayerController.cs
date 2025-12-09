@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("プレイヤーの初期位置"), SerializeField] Transform m_startPos;
     [Header("プレイヤーのステータス")]
     [SerializeField] private float m_defSpeed; //通常の移動スピード.
     [SerializeField] private float m_jumpForce; //ジャンプ力.
@@ -49,10 +48,6 @@ public class PlayerController : MonoBehaviour
 
         //移動速度の初期値を保存.
         m_moveSpeed = m_defSpeed;
-
-        //初期位置に移動させる.
-        if (m_startPos != null)
-            transform.position = m_startPos.position;
     }
 
     // Update is called once per frame

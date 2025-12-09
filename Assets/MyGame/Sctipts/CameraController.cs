@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraControl : MonoBehaviour
+public class CameraController : MonoBehaviour
 {
     [SerializeField] PlayerController m_target; //追跡対象のオブジェクト.
     [SerializeField] private Vector3 offset; //追跡対象からの距離.

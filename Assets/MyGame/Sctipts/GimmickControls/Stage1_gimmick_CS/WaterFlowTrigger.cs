@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WaterFlowTrigger : MonoBehaviour
 {
-    [SerializeField] RiverControl m_riverControl;
+    [SerializeField] RiverController m_riverControl;
     [SerializeField] private float m_flowSpeed; //水流の移動スピード
 
     private float m_delayTime; //移動までの待機時間.
