@@ -9,90 +9,84 @@ public class TutorialText : MonoBehaviour
     [SerializeField] GameObject m_crouchExplainTxt;
     [SerializeField] GameObject m_weatherExplainTxt;
 
-    private float m_txtDelay = 2f;
-    private float m_txtActiveTime = 3f;
-    private float m_displayTime;
-    private float m_passedTime;
+    private readonly float m_txtActiveTime = 3f;
 
     private bool m_isDisplayMoveTxt;
     private bool m_isDisplayJumpTxt;
     private bool m_isDisplayCrouchTxt;
     private bool m_isDisplayWeatherTxt;
-
-    private bool m_isCounting;
+    private Coroutine m_activeCoroutine;
 
     void Start()
     {
-        StartCoroutine(DelayDisableText(m_moveExplainTxt));
-        m_isDisplayMoveTxt = true;
+        ShowTextOnce("moveText");
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
+        Debug.Log(m_activeCoroutine);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        string name = collision.gameObject.name;
-
-        if (TryShowText(name, collision.gameObject))
+        if (!collision.CompareTag("textTrigger"))
         {
             return;
         }
+
+        ShowTextOnce(collision.gameObject.name);
     }
 
-    private bool TryShowText(string name, GameObject target)
+    private void ShowTextOnce(string name)
     {
-        //指定した文字列を含むオブジェクト以外は除外.
-        if (!(
-            name.Contains("jumpText") ||
-            name.Contains("crouchText") ||
-            name.Contains("weatherText")
-            )) return false;
+        if (name.Contains("jumpText") && m_isDisplayJumpTxt == true) return;
+        if (name.Contains("crouchText") && m_isDisplayCrouchTxt == true) return;
+        if (name.Contains("weatherText") && m_isDisplayWeatherTxt == true) return;
 
         //ほかのテキスト表示中なら古いテキストを非表示.
-        if (m_isCounting == true)
+        if (m_activeCoroutine != null)
         {
             CancelDisplayText();
+            StopCoroutine(m_activeCoroutine);
+            m_activeCoroutine = null;
         }
 
         //テキストを表示.
-        StartCoroutine(DelayDisableText(target));
+        m_activeCoroutine = StartCoroutine(DelayDisableText(name));
 
+        m_isDisplayMoveTxt = true;
         if (name.Contains("jumpText")) m_isDisplayJumpTxt = true;
-        else if (name.Contains("crouchText")) m_isDisplayCrouchTxt = true;
-        else if (name.Contains("weatherText")) m_isDisplayWeatherTxt = true;
-
-        return true;
+        if (name.Contains("crouchText")) m_isDisplayCrouchTxt = true;
+        if (name.Contains("weatherText")) m_isDisplayWeatherTxt = true;
     }
 
     //テキストを一定時間だけ表示.
-    private IEnumerator DelayDisableText(GameObject txtObj)
+    private IEnumerator DelayDisableText(string name)
     {
-        if (txtObj != null)
-        {
-            //テキスト表示.
-            txtObj.SetActive(true);
+        //一定時間テキストを表示.
+        ShowCorrectText(name);
+        yield return new WaitForSeconds(m_txtActiveTime);
 
-            //一定時間待機.
-            m_isCounting = true;
-            yield return new WaitForSeconds(m_txtActiveTime);
-            m_isCounting = false;
-
-            //テキスト非表示.
-            txtObj.SetActive(false);
-        }
+        CancelDisplayText();
+        m_activeCoroutine = null;
+        CancelDisplayText();
     }
 
+    //テキストを表示する.
+    private void ShowCorrectText(string name)
+    {
+        if (name.Contains("move")) m_moveExplainTxt.SetActive(true);
+        if (name.Contains("jump")) m_jumpExplainTxt.SetActive(true);
+        if (name.Contains("crouch")) m_crouchExplainTxt.SetActive(true);
+        if (name.Contains("weather")) m_weatherExplainTxt.SetActive(true);
+    }
+
+    //テキストを非表示にする.
     void CancelDisplayText()
     {
         m_moveExplainTxt.SetActive(false);
         m_jumpExplainTxt.SetActive(false);
         m_crouchExplainTxt.SetActive(false);
         m_weatherExplainTxt.SetActive(false);
-
-        StopCoroutine(DelayDisableText(null));
-        m_isCounting = false;
     }
 }
