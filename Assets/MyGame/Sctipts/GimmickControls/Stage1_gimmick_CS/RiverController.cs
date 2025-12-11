@@ -18,7 +18,6 @@ public class RiverController : MonoBehaviour
     private Vector3 m_goalWaterPos; //目標座標.
     public float DelayAppearTime => m_delayAppearTime;
 
-    private bool m_isSolved = false; //ギミック解除フラグ.
     private bool m_isAppeard = false; //水出現フラグ.
     private bool m_isDisabled = false; //オブジェクト無効フラグ.
 
@@ -36,22 +35,19 @@ public class RiverController : MonoBehaviour
     private void Update()
     {
         //ギミックが解除されたとき.
-        if (m_gimmickCtrl.IsGimmickActive() == true && m_isSolved == false)
+        if (m_gimmickCtrl.IsGimmickActive())
         {
-            AppearRiver();
-            m_isSolved = true;
-        }
+            //晴れを選択すると川の水が消える.
+            if (m_isAppeard == true && m_weatherManager.CurrentWeather == WeatherManager.WeatherType.sunny)
+            {
+                DisappearRiver();
+            }
 
-        //晴れを選択すると川の水が消える.
-        if (m_isAppeard == true && m_weatherManager.CurrentWeather == WeatherManager.WeatherType.sunny)
-        {
-            DisappearRiver();
-        }
-
-        //雨を選択すると川の水が現れる.
-        if (m_isAppeard == false && m_weatherManager.CurrentWeather == WeatherManager.WeatherType.rainy)
-        {
-            AppearRiver();
+            //雨を選択すると川の水が現れる.
+            if (m_isAppeard == false && m_weatherManager.CurrentWeather == WeatherManager.WeatherType.rainy)
+            {
+                AppearRiver();
+            }
         }
     }
 
