@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: e9a1c021e2b15154098c630befd8a9b3
+guid: bc7654359561c904385a7855dc12bf7b
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 9100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 323032
-  packageName: KAWAII ANIMATIONS Cool Action
-  packageVersion: 1.2.0
-  assetPath: Assets/KAWAII_ANIMATIOMS_CoolAction/Demo/Animator Controller/Sample_A_SelfDestruction01.controller
-  uploadId: 788658

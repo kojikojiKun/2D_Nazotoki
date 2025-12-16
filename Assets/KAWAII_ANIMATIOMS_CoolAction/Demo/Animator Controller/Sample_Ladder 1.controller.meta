@@ -1,16 +1,8 @@
 fileFormatVersion: 2
-guid: 07d8189dcc41b1b4fbec87819d8676d2
+guid: 8ddd5974cd4e4994983a576c5feb9c00
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 9100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 323032
-  packageName: KAWAII ANIMATIONS Cool Action
-  packageVersion: 1.2.0
-  assetPath: Assets/KAWAII_ANIMATIOMS_CoolAction/Demo/Animator Controller/Sample_Ladder
-    1.controller
-  uploadId: 788658

@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: 60fd5c22dd94b6d47aef255db5749140
+guid: 16d5fbd2ac988674191d38c521be356e
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 9100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 323032
-  packageName: KAWAII ANIMATIONS Cool Action
-  packageVersion: 1.2.0
-  assetPath: Assets/KAWAII_ANIMATIOMS_CoolAction/Demo/Animator Controller/Sample_Pair02.controller
-  uploadId: 788658

@@ -18,7 +18,7 @@ public class SceneController : MonoBehaviour
     }
 
     public void LoadSelectStage()
-    {
+    {     
         SceneManager.LoadScene("SelectStage");
     }
 }

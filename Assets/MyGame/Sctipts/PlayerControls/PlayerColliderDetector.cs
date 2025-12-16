@@ -54,6 +54,9 @@ public class PlayerColliderDetector : MonoBehaviour
 
         if (collision.CompareTag("goal"))
         {
+            //クリアアニメーション再生.
+            m_playerAnim.ClearAnim();
+
             //ステージクリア時の処理を実行する.
             StageManager.s_instance.ClearStage();
         }

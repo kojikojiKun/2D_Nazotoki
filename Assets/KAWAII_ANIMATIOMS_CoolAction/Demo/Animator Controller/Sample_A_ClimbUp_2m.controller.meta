@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: 19b43ea5f24017b468a61aa26da2ff55
+guid: 9ac9b56a89771484883dc15faf6218c4
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 9100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 323032
-  packageName: KAWAII ANIMATIONS Cool Action
-  packageVersion: 1.2.0
-  assetPath: Assets/KAWAII_ANIMATIOMS_CoolAction/Demo/Animator Controller/Sample_A_ClimbUp_2m.controller
-  uploadId: 788658

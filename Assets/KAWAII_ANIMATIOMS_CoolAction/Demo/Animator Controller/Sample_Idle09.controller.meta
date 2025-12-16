@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: 6767646aad8cc1a4393d12b8afbeb075
+guid: c17695d39a8518c4c975090a62f63b15
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 9100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 323032
-  packageName: KAWAII ANIMATIONS Cool Action
-  packageVersion: 1.2.0
-  assetPath: Assets/KAWAII_ANIMATIOMS_CoolAction/Demo/Animator Controller/Sample_Idle09.controller
-  uploadId: 788658

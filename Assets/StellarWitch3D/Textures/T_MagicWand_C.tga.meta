@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ec70de6cbe6495948b1106d6104f84aa
+guid: 3a457eb5697a8664e9b03898f25bc6c7
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -112,10 +112,3 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 309418
-  packageName: StellarWitch 3D
-  packageVersion: 1.1
-  assetPath: Assets/StellarWitch3D/Textures/T_MagicWand_C.tga
-  uploadId: 740464

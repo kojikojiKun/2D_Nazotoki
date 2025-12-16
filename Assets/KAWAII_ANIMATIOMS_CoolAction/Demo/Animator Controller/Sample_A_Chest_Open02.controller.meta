@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: 18aa65af4f9e191459096b1927872f02
+guid: 846603db2f968724a97778253e63339b
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 9100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 323032
-  packageName: KAWAII ANIMATIONS Cool Action
-  packageVersion: 1.2.0
-  assetPath: Assets/KAWAII_ANIMATIOMS_CoolAction/Demo/Animator Controller/Sample_A_Chest_Open02.controller
-  uploadId: 788658

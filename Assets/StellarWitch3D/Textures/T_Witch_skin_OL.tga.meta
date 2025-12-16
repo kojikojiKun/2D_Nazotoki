@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9159ea14602dbaf489e6730d832fec7c
+guid: 3e9f0fbd1ff00af4d960005630537468
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -112,10 +112,3 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 309418
-  packageName: StellarWitch 3D
-  packageVersion: 1.1
-  assetPath: Assets/StellarWitch3D/Textures/T_Witch_skin_OL.tga
-  uploadId: 740464

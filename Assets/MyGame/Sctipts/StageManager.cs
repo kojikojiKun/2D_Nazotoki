@@ -1,17 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using DG.Tweening;
 
 public class StageManager : MonoBehaviour
 {
     public static StageManager s_instance;
-
+    [SerializeField] GameObject m_clearWindow;
+ 
     [SerializeField] private Transform m_startPos; //プレイヤーが最初にスポーンする場所.
     private GameObject m_player;
     Transform m_checkPoint;
+    PlayerInput m_input;
 
     private void Awake()
     {
+        //インスタンス化.
         if (s_instance != null && s_instance != this)
         {
             Destroy(s_instance);
@@ -22,10 +25,12 @@ public class StageManager : MonoBehaviour
 
     private void Start()
     {
+        //プレイヤーをスタート地点まで移動.
         m_player = GameObject.FindGameObjectWithTag("Player");
         if (m_player != null)
         {
             Respown();
+            m_input = m_player.GetComponent<PlayerInput>();
         }
     }
 
@@ -46,13 +51,22 @@ public class StageManager : MonoBehaviour
         else
         {
             m_player.transform.position = m_startPos.position;
-            Debug.Log($"respawn{m_startPos.position},player{m_player.transform.position}");
         }
     }
 
     //プレイヤーがゴールに到達したときの処理.
     public void ClearStage()
     {
-        SceneController.s_instance.LoadSelectStage();
+        //キャラクターの操作をを無効化.
+        m_input.enabled = false;
+
+        //delayTime経過でクリアウィンドウ表示.
+        float delayTime = 1.5f;
+        this.transform.DOLocalMove(new Vector3(1f, 0, 0), delayTime).OnComplete(() =>
+        {
+            //クリアウィンドウ表示.
+            m_clearWindow.SetActive(true);
+        }
+            );
     }
 }

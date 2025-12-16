@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: 2d11f4c03aeee26489d8d514ac0b5ffd
+guid: c4a715ea4973a3f4e901a85f4554de09
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 9100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 323032
-  packageName: KAWAII ANIMATIONS Cool Action
-  packageVersion: 1.2.0
-  assetPath: Assets/KAWAII_ANIMATIOMS_CoolAction/Demo/Animator Controller/Sample_A_PushButton01.controller
-  uploadId: 788658

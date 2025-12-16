@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: f53f3a3078db3cd4a9bcd875d3b2a557
+guid: 8afa57cea33e7494c8d4a72d167f3ccc
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 145808
-  packageName: Terrain Sample Asset Pack
-  packageVersion: 2.0.1
-  assetPath: Assets/TerrainSampleAssets/Materials/Plant.asset
-  uploadId: 511657

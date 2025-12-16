@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: d298741fab188ff48b1f0d3c0da8a676
+guid: 810813995048e7d4ba6fdb811a781f84
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 9100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 323032
-  packageName: KAWAII ANIMATIONS Cool Action
-  packageVersion: 1.2.0
-  assetPath: Assets/KAWAII_ANIMATIOMS_CoolAction/Demo/Animator Controller/Sample_A_Dash.controller
-  uploadId: 788658

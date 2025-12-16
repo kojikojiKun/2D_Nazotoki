@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: 26576a00ac7c26744ab6b452ae5a6bae
+guid: a8a7b3a3873eae1438ac40134b0d63d4
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 309418
-  packageName: StellarWitch 3D
-  packageVersion: 1.1
-  assetPath: Assets/StellarWitch3D/Materials/M_StellarWitch_blouth.mat
-  uploadId: 740464

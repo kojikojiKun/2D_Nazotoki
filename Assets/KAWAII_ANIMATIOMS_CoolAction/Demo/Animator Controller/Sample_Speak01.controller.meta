@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: 1dcf34f3db9b8b644abef835ad198fb4
+guid: 1532b70eaaaaf8d44818bffcfb4e32e5
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 9100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 323032
-  packageName: KAWAII ANIMATIONS Cool Action
-  packageVersion: 1.2.0
-  assetPath: Assets/KAWAII_ANIMATIOMS_CoolAction/Demo/Animator Controller/Sample_Speak01.controller
-  uploadId: 788658

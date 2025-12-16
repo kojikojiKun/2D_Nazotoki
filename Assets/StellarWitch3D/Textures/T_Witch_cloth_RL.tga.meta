@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d68593ab7c3828849a7b2893c6f67b63
+guid: d47b5b48433b36048a5aba21d6d73c05
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -112,10 +112,3 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 309418
-  packageName: StellarWitch 3D
-  packageVersion: 1.1
-  assetPath: Assets/StellarWitch3D/Textures/T_Witch_cloth_RL.tga
-  uploadId: 740464

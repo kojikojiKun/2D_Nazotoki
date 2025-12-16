@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: 93415edde47040648869ae6638d33ced
+guid: 2520b027f6b286847ac912229f7de3c2
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 187052
-  packageName: Lowpoly Environment - Nature Free - MEDIEVAL FANTASY SERIES
-  packageVersion: 1.1.1
-  assetPath: Assets/Polytope Studio/Lowpoly_Environments/Sources/Materials/PT_Rocks_mat.mat
-  uploadId: 721141

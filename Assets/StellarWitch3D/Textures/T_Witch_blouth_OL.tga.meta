@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d5bd7b2a052cbd842ab1b585487f0448
+guid: c97eb25e42e831847b6a89d07b9b8658
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -112,10 +112,3 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 309418
-  packageName: StellarWitch 3D
-  packageVersion: 1.1
-  assetPath: Assets/StellarWitch3D/Textures/T_Witch_blouth_OL.tga
-  uploadId: 740464

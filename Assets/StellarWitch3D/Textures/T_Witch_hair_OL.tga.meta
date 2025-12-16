@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c15e14e51c928c446adbb036a99e1788
+guid: 02b8b53c10abd704d90b813eedd67c75
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -112,10 +112,3 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 309418
-  packageName: StellarWitch 3D
-  packageVersion: 1.1
-  assetPath: Assets/StellarWitch3D/Textures/T_Witch_hair_OL.tga
-  uploadId: 740464

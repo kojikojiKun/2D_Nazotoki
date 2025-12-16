@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: aea385a71ba308b4a8fc124da2e4eca4
+guid: c99eb0dec9819404e8a71b41ad17aa75
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 323032
-  packageName: KAWAII ANIMATIONS Cool Action
-  packageVersion: 1.2.0
-  assetPath: Assets/KAWAII_ANIMATIOMS_CoolAction/Demo/Floor.mat
-  uploadId: 788658

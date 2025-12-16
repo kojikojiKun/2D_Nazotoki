@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: dcfa837ee6dfe4c49b2d2ca1c88edb2e
+guid: d11b58bc45c7218409158239cc2a5306
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -112,10 +112,3 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 309418
-  packageName: StellarWitch 3D
-  packageVersion: 1.1
-  assetPath: Assets/StellarWitch3D/Textures/T_Witch_pupil_C.tga
-  uploadId: 740464

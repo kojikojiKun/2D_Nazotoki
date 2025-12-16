@@ -77,6 +77,7 @@ public class Tutorial : MonoBehaviour
     //テキストを一定時間だけ表示.
     private IEnumerator DelayDisableText(string name)
     {
+
         //一定時間テキストを表示.
         ShowCorrectText(name);
         yield return new WaitForSeconds(m_txtActiveTime);
@@ -96,7 +97,7 @@ public class Tutorial : MonoBehaviour
         {
             m_tutorialEventTxt.SetActive(true);
 
-        　　//天気の操作チュートリアルの説明windowを表示.
+            //天気の操作チュートリアルの説明windowを表示.
             StartCoroutine(OpenTurorialWindow());
         }
     }

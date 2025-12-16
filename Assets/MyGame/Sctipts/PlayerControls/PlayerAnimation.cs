@@ -100,4 +100,10 @@ public class PlayerAnimation : MonoBehaviour
         }
         m_isGroundedPrev = m_isGrounded;
     }
+
+    //ステージクリア時のアニメーションを再生.
+    public void ClearAnim()
+    {
+        m_animator.SetTrigger("clearStage");
+    }
 }
