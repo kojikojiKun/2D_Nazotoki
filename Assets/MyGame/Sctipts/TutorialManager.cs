@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Video;
 using UnityEngine.UI;
 
-public class Tutorial : MonoBehaviour
+public class TutorialManager : MonoBehaviour
 {
     [SerializeField] GameObject m_moveExplainTxt;
     [SerializeField] GameObject m_jumpExplainTxt;
@@ -13,10 +13,11 @@ public class Tutorial : MonoBehaviour
     [SerializeField] GameObject m_panel;
     [SerializeField] VideoPlayer m_videoPlayer;
     [SerializeField] Button m_closeButton;
+    [SerializeField] Button m_clearButton;
 
-    PlayerController m_playerCtrl;
-    PlayerAnimation m_playerAnim;
-    WeatherController m_weatherCtrl;
+    [SerializeField] PlayerController m_playerCtrl;
+    [SerializeField] PlayerAnimation m_playerAnim;
+    [SerializeField] WeatherController m_weatherCtrl;
 
     private readonly float m_txtActiveTime = 3f;
 
@@ -27,10 +28,6 @@ public class Tutorial : MonoBehaviour
 
     void Start()
     {
-        m_playerCtrl = GetComponent<PlayerController>();
-        m_playerAnim = GetComponent<PlayerAnimation>();
-        m_weatherCtrl = GetComponent<WeatherController>();
-
         //移動チュートリアルを表示.
         ShowTextOnce("moveText");
 
@@ -39,20 +36,18 @@ public class Tutorial : MonoBehaviour
         {
             CloseTutorialWindow();
         });
-    }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (!collision.CompareTag("textTrigger"))
+        m_clearButton.onClick.AddListener(() =>
         {
-            return;
-        }
+            //チュートリアルのクリア状態を保存.
+            ClearTutolial();
 
-        //チュートリアルテキストを表示.
-        ShowTextOnce(collision.gameObject.name);
+            //ステージ選択に遷移.
+            SceneController.s_instance.LoadSelectStage();
+        });
     }
 
-    private void ShowTextOnce(string name)
+    public void ShowTextOnce(string name)
     {
         if (name.Contains("jumpText") && m_isDisplayJumpTxt == true) return;
         if (name.Contains("crouchText") && m_isDisplayCrouchTxt == true) return;
@@ -166,5 +161,13 @@ public class Tutorial : MonoBehaviour
         m_jumpExplainTxt.SetActive(false);
         m_crouchExplainTxt.SetActive(false);
         m_tutorialEventTxt.SetActive(false);
+    }
+
+    //チュートリアルをクリア.
+    void ClearTutolial()
+    {
+        //チュートリアルをクリアしたことを保存.
+        PlayerPrefs.SetInt(GameManager.HAS_LANCHED, 1);
+        PlayerPrefs.Save();
     }
 }

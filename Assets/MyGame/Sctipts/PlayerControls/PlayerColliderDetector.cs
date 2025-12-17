@@ -6,6 +6,7 @@ public class PlayerColliderDetector : MonoBehaviour
 {
     [SerializeField] PlayerController m_player;
     [SerializeField] PlayerAnimation m_playerAnim;
+    [Header("チュートリアルのプレイヤーにだけ設定"),SerializeField] TutorialManager m_tutorial;
 
     [Header("壁との接触判定")]
     [SerializeField] LayerMask m_wallMask; //壁のレイヤー.
@@ -59,6 +60,17 @@ public class PlayerColliderDetector : MonoBehaviour
 
             //ステージクリア時の処理を実行する.
             StageManager.s_instance.ClearStage();
+        }
+
+        if (m_tutorial != null)
+        {
+            if (!collision.CompareTag("textTrigger"))
+            {
+                return;
+            }
+
+            //チュートリアルテキストを表示.
+            m_tutorial.ShowTextOnce(collision.gameObject.name);
         }
     }
 
