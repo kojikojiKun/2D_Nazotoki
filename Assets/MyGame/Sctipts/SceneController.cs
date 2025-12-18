@@ -24,17 +24,30 @@ public class SceneController : MonoBehaviour
         //チュートリアル未プレイならチュートリアル開始.
         if (PlayerPrefs.HasKey(GameManager.HAS_LANCHED))
         {
-            SceneManager.LoadScene("Tutolial");
-        }
-        else
-        {
             //チュートリアルプレイ済みならステージ選択シーンに遷移.
             LoadSelectStage();
         }
+        else
+        {
+            SceneManager.LoadScene("Tutolial");
+        }
     }
 
+    //ステージ選択画面.
     public void LoadSelectStage()
     {     
         SceneManager.LoadScene("SelectStage");
+    }
+
+    //タイトル画面.
+    public void LoadTitle()
+    {
+        SceneManager.LoadScene("Title");
+    }
+
+    //選択されたステージ.
+    public void LoadStage(string stage)
+    {
+        SceneManager.LoadScene(stage);
     }
 }

@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] PlayerController m_target; //追跡対象のオブジェクト.
+    PlayerController m_target; //追跡対象のオブジェクト.
     [SerializeField] private Vector3 offset; //追跡対象からの距離.
     private bool m_canChasing = true; //追跡フラグ.
+
+    private void Awake()
+    {
+        m_target = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+    }
 
     //追跡中止.
     public void StopChase()

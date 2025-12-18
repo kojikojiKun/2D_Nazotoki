@@ -39,8 +39,12 @@ public class TutorialManager : MonoBehaviour
 
         m_clearButton.onClick.AddListener(() =>
         {
-            //チュートリアルのクリア状態を保存.
-            ClearTutolial();
+            Debug.Log(GameManager.HAS_LANCHED);
+            int a = PlayerPrefs.GetInt(GameManager.HAS_LANCHED, 0);
+            Debug.Log(a);
+            //チュートリアルをクリアしたことを保存.
+            PlayerPrefs.SetInt(GameManager.HAS_LANCHED, 1);
+            PlayerPrefs.Save();
 
             //ステージ選択に遷移.
             SceneController.s_instance.LoadSelectStage();
@@ -161,13 +165,5 @@ public class TutorialManager : MonoBehaviour
         m_jumpExplainTxt.SetActive(false);
         m_crouchExplainTxt.SetActive(false);
         m_tutorialEventTxt.SetActive(false);
-    }
-
-    //チュートリアルをクリア.
-    void ClearTutolial()
-    {
-        //チュートリアルをクリアしたことを保存.
-        PlayerPrefs.SetInt(GameManager.HAS_LANCHED, 1);
-        PlayerPrefs.Save();
     }
 }

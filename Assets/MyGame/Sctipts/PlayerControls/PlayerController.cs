@@ -14,8 +14,12 @@ public class PlayerController : MonoBehaviour
     private PlayerInput m_playerInput;
     private Vector2 m_defCharColOffset; //プレイヤーコライダーのoffsetの初期値.
     private Vector2 m_defCharColSize; //プレイヤーコライダーのサイズの初期値.
+    private float m_defGravityScale; //重力の初期値.
     private Rigidbody2D m_rb2D;
     private Vector2 m_inputMove; //入力値.
+
+    const float MAG_SPEED = 1.2f; //移動スピードの増加倍率.
+    const float MAG_GRAVITY = 0.5f; //重力の増加倍率.
 
     private float m_moveSpeed; //反映する移動スピード.
     private bool m_isGrounded; //接地フラグ. 
@@ -27,7 +31,7 @@ public class PlayerController : MonoBehaviour
     private bool m_pressCrouch; //しゃがみボタン検知フラグ.
     private bool m_isCrouch; //しゃがみフラグ.
     private bool m_canStanding; //しゃがみ解除可能フラグ.
-   
+    private bool m_isOnIce; //氷の上にかどうかを判定するフラグ.
     private bool m_hitWall; //壁との接触検知フラグ.
     private float m_allowedDist; //壁までの距離制限.
 
@@ -43,11 +47,12 @@ public class PlayerController : MonoBehaviour
         //必要な要素を参照.
         m_playerInput = GetComponent<PlayerInput>();
         m_rb2D = GetComponent<Rigidbody2D>();
+
+        //初期状態の値を保存.
         m_defCharColOffset = new Vector2(m_characterCollider.offset.x, m_characterCollider.offset.y);
         m_defCharColSize = new Vector2(m_characterCollider.size.x, m_characterCollider.size.y);
-
-        //移動速度の初期値を保存.
         m_moveSpeed = m_defSpeed;
+        m_defGravityScale = m_rb2D.gravityScale;
     }
 
     // Update is called once per frame
@@ -55,6 +60,37 @@ public class PlayerController : MonoBehaviour
     {
         MovingPlayer();
         SlidePlayer();
+    }
+
+    //変更された天気を受け取り.
+    public void OnWeatherChanged(WeatherManager.WeatherType newWeather)
+    {
+        ChangeStatuses(newWeather);
+    }
+
+    //プレイヤーのステータスを変更する.
+    void ChangeStatuses(WeatherManager.WeatherType newWeather)
+    {
+        //初期値に戻す.
+        m_moveSpeed = m_defSpeed;
+        m_rb2D.gravityScale = m_defGravityScale;
+
+        switch (newWeather)
+        {
+            case WeatherManager.WeatherType.rainy:
+                break;
+            case WeatherManager.WeatherType.snow:
+                break;
+            case WeatherManager.WeatherType.sunny:
+                break;
+            case WeatherManager.WeatherType.windy:
+                //移動スピードUP
+                m_moveSpeed *= MAG_SPEED;
+
+                //重力減少.
+                m_rb2D.gravityScale *= MAG_GRAVITY;
+                break;
+        }
     }
 
     //移動入力受け取り.
@@ -74,6 +110,15 @@ public class PlayerController : MonoBehaviour
     void MovingPlayer()
     {
         if (m_inSlope == true)
+        {
+            return;
+        }
+
+        if (m_isOnIce == true)
+        {
+            MovingPlayerOnIce();
+        }
+        else
         {
             return;
         }
@@ -106,6 +151,10 @@ public class PlayerController : MonoBehaviour
             //実際に移動させる.
             transform.position += (Vector3)(velocity * allowedMove);
         }
+    }
+
+    void MovingPlayerOnIce()
+    {
     }
 
     //地面の傾きの方向、傾きの大きさを受け取る.
@@ -179,11 +228,14 @@ public class PlayerController : MonoBehaviour
         //上方向にm_jumpForceの力を加える.
         m_rb2D.AddForce(Vector2.up * m_jumpForce, ForceMode2D.Impulse);
 
-        //しゃがみ状態解除.
-        m_isCrouch = false;
+        if (m_isCrouch == true)
+        {
+            //しゃがみ状態解除.
+            m_isCrouch = false;
 
-        //しゃがみ解除で移動速度を元に戻す.
-        m_moveSpeed = m_defSpeed;
+            //しゃがみ解除で移動速度を元に戻す.
+            m_moveSpeed = m_defSpeed;
+        }
 
         //プレイヤーコライダーのパラメータを初期値に戻す.
         m_characterCollider.offset = new Vector2(m_defCharColOffset.x, m_defCharColOffset.y);
