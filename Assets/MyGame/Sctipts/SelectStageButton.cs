@@ -23,6 +23,7 @@ public class SelectStageButton : MonoBehaviour
                 else
                 {
                     Debug.Log("scene name is null !!");
+                    SceneController.s_instance.LoadTitle();
                 }
             }
             else
