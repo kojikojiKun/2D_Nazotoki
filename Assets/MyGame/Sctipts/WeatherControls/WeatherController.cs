@@ -14,7 +14,6 @@ public class WeatherController : MonoBehaviour
     
     private PlayerInput m_playerInput;
 
-    private Vector2 m_inputMove; //入力値.
     private Vector3 m_defWheelScale; //UIホイールの初期のscale.
     private Vector3 m_selectedWheelScale; //選択されているUIホイールのscale.
 

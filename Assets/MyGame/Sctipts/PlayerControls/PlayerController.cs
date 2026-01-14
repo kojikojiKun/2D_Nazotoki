@@ -10,8 +10,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float m_slideSpeed; //滑り落ちるときのスピード.
     [SerializeField] PlayerColliderDetector m_colDetect; //接地判定,壁との接触判定,天井との接触判定.
     [SerializeField] CapsuleCollider2D m_characterCollider; //プレイヤーの当たり判定.
+    [SerializeField] AudioClip m_footStepSE_1;
+    [SerializeField] AudioClip m_footStepSE_2;
+    [SerializeField] AudioClip m_jumpSE;
 
-    private PlayerInput m_playerInput;
+    private AudioSource m_audioSource;
+
     private Vector2 m_defCharColOffset; //プレイヤーコライダーのoffsetの初期値.
     private Vector2 m_defCharColSize; //プレイヤーコライダーのサイズの初期値.
     private float m_defGravityScale; //重力の初期値.
@@ -31,7 +35,6 @@ public class PlayerController : MonoBehaviour
     private bool m_pressCrouch; //しゃがみボタン検知フラグ.
     private bool m_isCrouch; //しゃがみフラグ.
     private bool m_canStanding; //しゃがみ解除可能フラグ.
-    private bool m_isOnIce; //氷の上にかどうかを判定するフラグ.
     private bool m_hitWall; //壁との接触検知フラグ.
     private float m_allowedDist; //壁までの距離制限.
 
@@ -45,8 +48,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         //必要な要素を参照.
-        m_playerInput = GetComponent<PlayerInput>();
         m_rb2D = GetComponent<Rigidbody2D>();
+        m_audioSource = GetComponent<AudioSource>();
 
         //初期状態の値を保存.
         m_defCharColOffset = new Vector2(m_characterCollider.offset.x, m_characterCollider.offset.y);
@@ -114,15 +117,6 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (m_isOnIce == true)
-        {
-            MovingPlayerOnIce();
-        }
-        else
-        {
-            return;
-        }
-
         if (m_hitWall == false || //移動方向に壁がない.
             m_allowedDist > 0 ) //移動可能距離が0以上.
         {
@@ -153,8 +147,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void MovingPlayerOnIce()
+    //足音を鳴らす.
+    public void PlayStepSound()
     {
+        int random = Random.Range(0, 2);
+
+        if (random == 0)
+        {
+            m_audioSource.PlayOneShot(m_footStepSE_1);
+        }
+        else if(random == 1)
+        {
+            m_audioSource.PlayOneShot(m_footStepSE_2);
+        }
     }
 
     //地面の傾きの方向、傾きの大きさを受け取る.
@@ -227,6 +232,9 @@ public class PlayerController : MonoBehaviour
     {
         //上方向にm_jumpForceの力を加える.
         m_rb2D.AddForce(Vector2.up * m_jumpForce, ForceMode2D.Impulse);
+
+        //ジャンプSE再生.
+        m_audioSource.PlayOneShot(m_jumpSE);
 
         if (m_isCrouch == true)
         {
