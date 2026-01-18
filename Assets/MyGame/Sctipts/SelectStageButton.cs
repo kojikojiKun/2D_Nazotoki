@@ -3,33 +3,44 @@ using UnityEngine.UI;
 
 public class SelectStageButton : MonoBehaviour
 {
-    [SerializeField] private string m_sceneName;
+    [SerializeField] private string m_loadSceneName;
     [SerializeField] private bool m_isLoadTitle = false;
-    Button m_button;
+
+    private Button m_button;
 
     private void Start()
     {
-        m_button = GetComponent<Button>();
-
-        //ボタンに設定した名前のシーンに遷移.
-        m_button.onClick.AddListener(() =>
+        if (!TryGetComponent(out m_button))
         {
-            if (m_isLoadTitle == false)
-            {
-                if (m_sceneName != null)
-                {
-                    SceneController.s_instance.LoadStage(m_sceneName);
-                }
-                else
-                {
-                    Debug.Log("scene name is null !!");
-                    SceneController.s_instance.LoadTitle();
-                }
-            }
-            else
-            {
-                SceneController.s_instance.LoadTitle();
-            }
-        });
+            Debug.LogError("Button component not found.");
+            return;
+        }
+
+        m_button.onClick.AddListener(OnClick);
+    }
+
+    private void OnClick()
+    {
+        if (SceneController.s_instance == null)
+        {
+            Debug.LogError("SceneController is null.");
+            return;
+        }
+
+        if (m_isLoadTitle)
+        {
+            SceneController.s_instance.LoadTitle();
+            return;
+        }
+
+        if (!string.IsNullOrEmpty(m_loadSceneName))
+        {
+            SceneController.s_instance.LoadStage(m_loadSceneName);
+        }
+        else
+        {
+            Debug.LogWarning("scene name is empty. Load Title.");
+            SceneController.s_instance.LoadTitle();
+        }
     }
 }

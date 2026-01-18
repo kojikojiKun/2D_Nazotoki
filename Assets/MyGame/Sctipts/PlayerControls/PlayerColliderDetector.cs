@@ -26,11 +26,6 @@ public class PlayerColliderDetector : MonoBehaviour
     private bool m_inSlope;
     private bool m_isGrounded; //接地フラグ.
 
-    private void Start()
-    {
-        //Time.timeScale = 0.5f;
-    }
-
     private void FixedUpdate()
     {
         m_move = m_player.InputMove.normalized * m_player.MoveSpeed * Time.fixedDeltaTime; //移動入力を取得.
@@ -44,13 +39,13 @@ public class PlayerColliderDetector : MonoBehaviour
         if (collision.CompareTag("checkPoint"))
         {
             //チェックポイントの座標を渡す.
-            StageManager.s_instance.ReceiveCheckPoint(collision.transform);
+            GameManager.s_instance.ReceiveCheckPoint(collision.transform);
         }
 
         if (collision.CompareTag("respawnPlayer"))
         {
             //プレイヤーをリスポーンさせる.
-            StageManager.s_instance.Respown();
+            GameManager.s_instance.Respawn();
         }
 
         if (collision.CompareTag("goal"))
@@ -59,7 +54,7 @@ public class PlayerColliderDetector : MonoBehaviour
             m_playerAnim.ClearAnim();
 
             //ステージクリア時の処理を実行する.
-            StageManager.s_instance.ClearStage();
+            StartCoroutine(GameManager.s_instance.ClearStage());
         }
 
         if (m_tutorial != null)

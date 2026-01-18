@@ -34,10 +34,13 @@ public class WeatherEventListner : MonoBehaviour
             return;
         }
 
-        //BaseGimmickCtrl‚É“VŒó‚ð“n‚·.
-        foreach (var gimmick in m_gimmicks)
+        if (m_gimmicks.Count > 0)
         {
-            gimmick.OnWeatherChanged(newWeather);
+            //BaseGimmickCtrl‚É“VŒó‚ð“n‚·.
+            foreach (var gimmick in m_gimmicks)
+            {
+                gimmick.OnWeatherChanged(newWeather);
+            }
         }
     }
 }

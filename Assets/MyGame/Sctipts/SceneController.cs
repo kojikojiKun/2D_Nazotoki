@@ -6,48 +6,60 @@ using UnityEngine.SceneManagement;
 public class SceneController : MonoBehaviour
 {
     public static SceneController s_instance;
+    private AudioSource m_audioSource;
 
     private void Awake()
     {
         //インスタンス化.
         if (s_instance != null && s_instance != this)
         {
-            Destroy(s_instance);
+            Destroy(gameObject);
             return;
         }
         s_instance = this;
         DontDestroyOnLoad(s_instance);
+
+        m_audioSource = GetComponent<AudioSource>();
     }
 
     public void StartGame()
     {
-        //チュートリアル未プレイならチュートリアル開始.
         if (PlayerPrefs.HasKey(GameManager.HAS_LANCHED))
         {
-            //チュートリアルプレイ済みならステージ選択シーンに遷移.
-            LoadSelectStage();
+            StartCoroutine(LoadSceneWithSE("SelectStage"));
         }
         else
         {
-            SceneManager.LoadScene("Tutolial");
+            StartCoroutine(LoadSceneWithSE("Tutolial"));
         }
     }
 
-    //ステージ選択画面.
-    public void LoadSelectStage()
-    {     
-        SceneManager.LoadScene("SelectStage");
-    }
 
-    //タイトル画面.
     public void LoadTitle()
     {
-        SceneManager.LoadScene("Title");
+        StartCoroutine(LoadSceneWithSE("Title"));
     }
 
-    //選択されたステージ.
+    public void LoadSelectStage()
+    {
+        StartCoroutine(LoadSceneWithSE("SelectStage"));
+    }
+
+    public void LoadTutolial()
+    {
+        StartCoroutine(LoadSceneWithSE("Tutolial"));
+    }
+
     public void LoadStage(string stage)
     {
-        SceneManager.LoadScene(stage);
+        StartCoroutine(LoadSceneWithSE(stage));
     }
+
+    private IEnumerator LoadSceneWithSE(string sceneName)
+    {
+        m_audioSource.Play();
+        yield return new WaitForSeconds(0.2f); //SEを再生するため待機.
+        SceneManager.LoadScene(sceneName);
+    }
+
 }

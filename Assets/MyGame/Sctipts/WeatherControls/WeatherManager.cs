@@ -136,7 +136,7 @@ public class WeatherManager : MonoBehaviour
         RenderSettings.fogDensity = data.fogDensity;
     }
 
-
+    //フェードインを開始.
     void StartSeFadeIn(AudioClip se)
     {
         if (m_seFadeCoroutine != null)

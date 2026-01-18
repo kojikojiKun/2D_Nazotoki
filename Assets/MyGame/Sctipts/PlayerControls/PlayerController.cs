@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] AudioClip m_footStepSE_1;
     [SerializeField] AudioClip m_footStepSE_2;
     [SerializeField] AudioClip m_jumpSE;
+    [SerializeField] AudioClip m_clear;
 
     private AudioSource m_audioSource;
 
@@ -23,7 +24,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 m_inputMove; //入力値.
 
     const float MAG_SPEED = 1.2f; //移動スピードの増加倍率.
-    const float MAG_GRAVITY = 0.5f; //重力の増加倍率.
+    const float MAG_GRAVITY = 0.7f; //重力の増加倍率.
 
     private float m_moveSpeed; //反映する移動スピード.
     private bool m_isGrounded; //接地フラグ. 
@@ -74,9 +75,17 @@ public class PlayerController : MonoBehaviour
     //プレイヤーのステータスを変更する.
     void ChangeStatuses(WeatherManager.WeatherType newWeather)
     {
-        //初期値に戻す.
-        m_moveSpeed = m_defSpeed;
-        m_rb2D.gravityScale = m_defGravityScale;
+        //天候が強風のとき.
+        if (newWeather != WeatherManager.WeatherType.windy)
+        {
+            //しゃがんでいないとき.
+            if (m_isCrouch != true)
+            {
+                //スピードと重力初期値に戻す.
+                m_moveSpeed = m_defSpeed;
+                m_rb2D.gravityScale = m_defGravityScale;
+            }
+        }
 
         switch (newWeather)
         {
@@ -160,6 +169,12 @@ public class PlayerController : MonoBehaviour
         {
             m_audioSource.PlayOneShot(m_footStepSE_2);
         }
+    }
+
+    //クリア時に再生.
+    public void PlayClearVoice()
+    {
+        m_audioSource.PlayOneShot(m_clear);
     }
 
     //地面の傾きの方向、傾きの大きさを受け取る.
