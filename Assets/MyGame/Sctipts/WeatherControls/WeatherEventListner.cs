@@ -6,7 +6,7 @@ using DG.Tweening;
 public class WeatherEventListner : MonoBehaviour
 {
     private WeatherManager.WeatherType m_weatherType;
-    private PlayerController m_player;
+    [SerializeField] PlayerController m_player;
     [SerializeField] List<BaseGimmickCtrl> m_gimmicks;
 
     //天候の変化イベントを購読.
@@ -15,16 +15,12 @@ public class WeatherEventListner : MonoBehaviour
     //無効化したとき購読解除.
     private void OnDisable() => WeatherManager.OnWeatherChanged -= HandleWeatherChanged;
 
-    private void Awake()
-    {
-        m_player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-    }
-
     //変化した天候を受け取る.
     private void HandleWeatherChanged(WeatherManager.WeatherType newWeather)
     {
         if (m_player != null)
         {
+            Debug.Log(newWeather);
             m_player.OnWeatherChanged(newWeather);
         }
 

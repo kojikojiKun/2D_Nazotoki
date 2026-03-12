@@ -57,6 +57,8 @@ public class PlayerController : MonoBehaviour
         m_defCharColSize = new Vector2(m_characterCollider.size.x, m_characterCollider.size.y);
         m_moveSpeed = m_defSpeed;
         m_defGravityScale = m_rb2D.gravityScale;
+
+        GameManager.s_instance.RegisterPlayer(this);
     }
 
     // Update is called once per frame
