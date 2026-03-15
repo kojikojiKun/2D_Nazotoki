@@ -54,14 +54,14 @@ public class Enemy_1Ctrl : MonoBehaviour
 
         //入力、物理演算無効化.
         m_playerInput.enabled = false;
-        m_playerRb.isKinematic = true;
+        m_playerRb.useFullKinematicContacts = true;
     }
 
     //プレイヤーの移動が完了したらリスポーンさせる.
     public void FinishRemovePlayer() 
     {
         m_isCatch = false;
-        m_playerRb.isKinematic=false;
+        m_playerRb.useFullKinematicContacts=false;
 
         //カメラの追跡再開.
         m_camera.StartChase();

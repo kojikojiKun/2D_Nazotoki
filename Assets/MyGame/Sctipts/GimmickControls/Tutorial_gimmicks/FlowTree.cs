@@ -6,26 +6,26 @@ public class FlowTree : MonoBehaviour
 {
     private enum MoveMode
     {
-        dry, //“®‚©‚³‚È‚¢.
-        flow //–Ø‚ğ—¬‚·.
+        dry, //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½.
+        flow //ï¿½Ø‚ğ—¬‚ï¿½.
     }
 
-    [SerializeField] Vector3 m_flowDir; //…—¬‚Ì•ûŒü.
-    [SerializeField] private float m_targetSpeed; //Å‘å‚Ì—¬‚ê‚Ì‘¬‚³.
-    [SerializeField] private float m_smooth; //…—¬‚Ì‰Á‘¬‚Ì‹­‚³.
-    [SerializeField] private float m_maxHeight; //•‚‚©‚ÔãŒÀ.
-    [SerializeField] private float m_maxBuoyancy; //•‚—Í‚ÌÅ‘å’l.
-    [SerializeField] private float m_buoyancySpeed; //•‚—Í‚Ì‘‚¦‚é‘¬“x.
+    [SerializeField] Vector3 m_flowDir; //ï¿½ï¿½ï¿½ï¿½ï¿½Ì•ï¿½ï¿½ï¿½.
+    [SerializeField] private float m_targetSpeed; //ï¿½Å‘ï¿½Ì—ï¿½ï¿½ï¿½Ì‘ï¿½ï¿½ï¿½.
+    [SerializeField] private float m_smooth; //ï¿½ï¿½ï¿½ï¿½ï¿½Ì‰ï¿½ï¿½ï¿½ï¿½Ì‹ï¿½ï¿½ï¿½.
+    [SerializeField] private float m_maxHeight; //ï¿½ï¿½ï¿½ï¿½ï¿½Ôï¿½ï¿½.
+    [SerializeField] private float m_maxBuoyancy; //ï¿½ï¿½ï¿½Í‚ÌÅ‘ï¿½l.
+    [SerializeField] private float m_buoyancySpeed; //ï¿½ï¿½ï¿½Í‚Ì‘ï¿½ï¿½ï¿½ï¿½é‘¬ï¿½x.
 
-    private float m_buoyancyProgress = 0; //Œ´ˆö‚Ì•‚‚«ã‚ª‚è‚Ìis“x.
-    private float m_initHeight; //‰Šú‚ÌyÀ•W.
+    private float m_buoyancyProgress = 0; //ï¿½ï¿½ï¿½ï¿½ï¿½Ì•ï¿½ï¿½ï¿½ï¿½ã‚ªï¿½ï¿½Ìiï¿½sï¿½x.
+    private float m_initHeight; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½yï¿½ï¿½ï¿½W.
     private Rigidbody m_rb;
     private MoveMode m_moveMode;
 
     // Start is called before the first frame update
     void Start()
     {
-        //•K—v‚È—v‘f‚ğQÆ.
+        //ï¿½Kï¿½vï¿½È—vï¿½fï¿½ï¿½ï¿½Qï¿½ï¿½.
         m_rb = GetComponent<Rigidbody>();
 
         m_moveMode = MoveMode.dry;
@@ -40,54 +40,54 @@ public class FlowTree : MonoBehaviour
             Flow();
         }
 
-        //ƒJƒƒ‰‚É‰f‚ç‚È‚­‚È‚Á‚½‚ç–³Œø‰».
+        //ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½É‰fï¿½ï¿½È‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ç–³ï¿½ï¿½ï¿½ï¿½.
         if (transform.position.z < -15f)
         {
             gameObject.SetActive(false);
         }
     }
 
-    //–Ø‚ğ—¬‚·.
+    //ï¿½Ø‚ğ—¬‚ï¿½.
     void Flow()
     {
         Vector3 targetVelocity = m_flowDir.normalized * m_targetSpeed;
 
         ApplyBuoyancy();
 
-        //…—¬‚É‚ä‚Á‚­‚è‘¬“x‚ğ‹ß‚Ã‚¯‚é.
-        m_rb.velocity = Vector3.Lerp(
-            m_rb.velocity,
+        //ï¿½ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½ï¿½ï¿½è‘¬ï¿½xï¿½ï¿½ï¿½ß‚Ã‚ï¿½ï¿½ï¿½.
+        m_rb.linearVelocity = Vector3.Lerp(
+            m_rb.linearVelocity,
             targetVelocity,
             Time.deltaTime * m_smooth
             );
     }
 
-    //•‚—Í‚Ìˆ—.
+    //ï¿½ï¿½ï¿½Í‚Ìï¿½ï¿½ï¿½.
     void ApplyBuoyancy()
     {
-        //Œ»İ‚ÌyÀ•W‚ğ‹‚ß‚é.
+        //ï¿½ï¿½ï¿½İ‚ï¿½yï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ß‚ï¿½.
         float currentHeight = transform.position.y;
 
-        //yÀ•W‚ªãŒÀ‚ğ’´‚¦‚é‚Æ•‚—Í‚ğ‚©‚¯‚È‚¢.
+        //yï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ğ’´‚ï¿½ï¿½ï¿½Æ•ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½.
         if (currentHeight > m_maxHeight)
         {
             return;
         }
 
-        //i’»‚ğ‘‚â‚·(0`1)
+        //ï¿½iï¿½ï¿½ï¿½ğ‘‚â‚·(0ï¿½`1)
         m_buoyancyProgress += Time.deltaTime * m_buoyancySpeed;
         m_buoyancyProgress = Mathf.Clamp01(m_buoyancyProgress);
 
-        //•‚—Í‚ÌŒvZ.
+        //ï¿½ï¿½ï¿½Í‚ÌŒvï¿½Z.
         float buoyancy = Mathf.Lerp(0f, m_maxBuoyancy, m_buoyancyProgress);
 
-        //ã•ûŒü‚É—Í‚ğ‰Á‚¦‚é.
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É—Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
         m_rb.AddForce(Vector3.up * buoyancy, ForceMode.Acceleration);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        //…—¬‚ÉG‚ê‚½‚Æ‚«.
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ÉGï¿½ê‚½ï¿½Æ‚ï¿½.
         if (other.CompareTag("waterTrigger"))
         {
             m_moveMode = MoveMode.flow;
