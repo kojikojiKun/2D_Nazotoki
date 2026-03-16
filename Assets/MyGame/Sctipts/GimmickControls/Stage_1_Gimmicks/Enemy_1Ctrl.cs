@@ -11,6 +11,7 @@ public class Enemy_1Ctrl : MonoBehaviour
     PlayerInput m_playerInput;
     Rigidbody2D m_playerRb;
     private bool m_isCatch=false;
+    public bool CanMove = true;
 
     private void Start()
     {
@@ -21,7 +22,10 @@ public class Enemy_1Ctrl : MonoBehaviour
 
     private void Update()
     {
-        if(m_isCatch == true)
+        if (!CanMove)
+            return;
+
+        if(m_isCatch)
         {
             m_playerController.gameObject.transform.position = m_tentacle.transform.position;
         }
@@ -31,7 +35,7 @@ public class Enemy_1Ctrl : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            if (m_isCatch == false)
+            if (m_isCatch)
             {
                 Attack();
             }

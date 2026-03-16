@@ -14,6 +14,8 @@ public class BaseGimmickCtrl : MonoBehaviour
     WeatherManager m_weatherManager;
     [SerializeField] private List<WeatherPriority> m_weatherPriorities;
 
+    private WeatherManager.WeatherType m_currentWeather;
+    public WeatherManager.WeatherType CurrentWeather => m_currentWeather;
     private int m_progress = 0; //ギミックの進行度.
     private bool m_isWithinCamera = false; //カメラの範囲内.
     private bool m_previousCameraState;
@@ -58,6 +60,7 @@ public class BaseGimmickCtrl : MonoBehaviour
     private void OnEnterCamera()
     {
         m_isWithinCamera = true;
+        m_currentWeather = m_weatherManager.CurrentWeather;
         TryProgress(m_weatherManager.CurrentWeather);
     }
 
@@ -71,6 +74,7 @@ public class BaseGimmickCtrl : MonoBehaviour
     public void OnWeatherChanged(WeatherManager.WeatherType newWeather)
     {
         if (m_isWithinCamera == false) return;
+        m_currentWeather = newWeather;
         TryProgress(newWeather);
     }
 

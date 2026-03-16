@@ -11,7 +11,6 @@ public class RiverController : MonoBehaviour
     [SerializeField] private float m_delayAppearTime; //出現までの時間.
     [SerializeField] private float m_delayDisappearTime; //見えなくなるまでの時間.
 
-    WeatherManager m_weatherManager;
     BaseGimmickCtrl m_gimmickCtrl;
     private float m_goalWarerHeight = -34f; //目標のy座標.
     private Vector3 m_initWaterPos; //初期座標.
@@ -23,7 +22,6 @@ public class RiverController : MonoBehaviour
 
     private void Start()
     {
-        m_weatherManager = WeatherManager.s_instance;
         m_gimmickCtrl = GetComponentInParent<BaseGimmickCtrl>();
 
         m_initWaterPos = m_riverWater.transform.position;
@@ -38,13 +36,13 @@ public class RiverController : MonoBehaviour
         if (m_gimmickCtrl.IsGimmickActive())
         {
             //晴れを選択すると川の水が消える.
-            if (m_isAppeard == true && m_weatherManager.CurrentWeather == WeatherManager.WeatherType.sunny)
+            if (m_isAppeard == true && m_gimmickCtrl.CurrentWeather == WeatherManager.WeatherType.sunny)
             {
                 DisappearRiver();
             }
 
             //雨を選択すると川の水が現れる.
-            if (m_isAppeard == false && m_weatherManager.CurrentWeather == WeatherManager.WeatherType.rainy)
+            if (m_isAppeard == false && m_gimmickCtrl.CurrentWeather == WeatherManager.WeatherType.rainy)
             {
                 AppearRiver();
             }
