@@ -35,10 +35,7 @@ public class Enemy_1Ctrl : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            if (m_isCatch)
-            {
-                Attack();
-            }
+            Attack();
         }
     }
 

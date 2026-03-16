@@ -4,13 +4,13 @@ using System.Collections;
 public class FreezeEnemyGimmick : MonoBehaviour
 {
 
-    [SerializeField] Renderer m_water;
+    [SerializeField] Material m_water;
     [SerializeField] GameObject m_enemy;
-
-    private Color m_defColor;
+    [SerializeField] Color m_defColor;
+    [SerializeField] Collider2D m_collider;
     private bool m_isWaveStopped = false;
 
-    BaseGimmickCtrl m_gimmickCtrl;   
+    BaseGimmickCtrl m_gimmickCtrl;
     Enemy_1Ctrl m_enemyCtrl;
     Animator m_enemyAnimator;
 
@@ -23,22 +23,28 @@ public class FreezeEnemyGimmick : MonoBehaviour
 
     private void Start()
     {
-        m_defColor = m_water.material.GetColor("_Color");
+        SetMaterialValue(0.1f, 0.1f);
+        ChangeWaterMaterialBrihgtness();
     }
 
     private void Update()
     {
+        if (!m_gimmickCtrl.IsGimmickActive())
+            return;
+
         if (m_gimmickCtrl.CurrentWeather == WeatherManager.WeatherType.snow && !m_isWaveStopped)
         {
-            StartCoroutine(SetMaterialValue(0, 0));
+            m_isWaveStopped = true;
+            m_collider.enabled = true;
+            SetMaterialValue(0, 0);
             FreezeEnemy();
-            m_isWaveStopped = !m_isWaveStopped;
         }
         else if (m_gimmickCtrl.CurrentWeather == WeatherManager.WeatherType.sunny && m_isWaveStopped)
         {
-            StartCoroutine(SetMaterialValue(0.1f, 0.1f));
+            m_isWaveStopped = false;
+            m_collider.enabled = false;
+            SetMaterialValue(0.1f, 0.1f);
             DeFrostEnemy();
-            m_isWaveStopped = !m_isWaveStopped;
         }
     }
 
@@ -54,38 +60,32 @@ public class FreezeEnemyGimmick : MonoBehaviour
         m_enemyCtrl.CanMove = true;
     }
 
-    void ChangeWaterMaterialBrihgtness(bool isFrose)
+    void ChangeWaterMaterialBrihgtness()
     {
-        if (!isFrose)
+        if (!m_isWaveStopped)
         {
-            m_water.material.SetColor("_Color", m_defColor);
+            m_water.SetColor("_Color", m_defColor);
             return;
         }
 
-        Color color = m_water.material.GetColor("_Color");
+        Color color = m_water.GetColor("_Color");
 
         Color.RGBToHSV(color, out float h, out float s, out float v);
-        v += 5f;
+        v += 1f;
         v = Mathf.Clamp01(v);
+        s -= 1f;
+        s = Mathf.Clamp01(s);
 
         Color newColor = Color.HSVToRGB(h, s, v);
-        m_water.material.SetColor("_Color", newColor);
+        m_water.SetColor("_Color", newColor);
     }
 
-    private IEnumerator SetMaterialValue(float targetSpeed, float tartgetDisSpeed)
+    //êÖÇÃmaterialÇÃílÇïœçXÇµÅAîgÇé~ÇﬂÇΩÇËìÆÇ©ÇµÇΩÇËÇ∑ÇÈ.
+    void SetMaterialValue(float targetSpeed, float targetDisSpeed)
     {
-        while (true)
-        {
-            float speed = m_water.material.GetFloat("_Speed");
-            float disSpeed = m_water.material.GetFloat("_Displacement_Speed");
+        m_water.SetFloat("_Speed", targetSpeed);
+        m_water.SetFloat("_Displacement_Speed", targetDisSpeed);
 
-            speed = Mathf.MoveTowards(speed, targetSpeed, 0.1f);
-            disSpeed = Mathf.MoveTowards(disSpeed, tartgetDisSpeed, 0.1f);
-
-            m_water.material.SetFloat("_Speed", Mathf.Lerp(speed, targetSpeed,0.2f));
-            m_water.material.SetFloat("_Displacement_Speed", Mathf.Lerp(disSpeed, tartgetDisSpeed, 0.2f));
-
-            yield return new WaitForSeconds(0.5f);
-        }
+        ChangeWaterMaterialBrihgtness();
     }
 }
