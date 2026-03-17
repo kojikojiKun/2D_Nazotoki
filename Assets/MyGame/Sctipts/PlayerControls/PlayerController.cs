@@ -345,6 +345,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //立ち上がりのアニメーションイベント.
     public void FinishStanding()
     {
         m_canMove = true;
