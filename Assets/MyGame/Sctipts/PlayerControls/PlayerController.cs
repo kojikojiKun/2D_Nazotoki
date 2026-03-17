@@ -1,6 +1,6 @@
 ﻿using UnityEngine.InputSystem;
-using UnityEngine.UI;
 using UnityEngine;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float m_defSpeed; //通常の移動スピード.
     [SerializeField] private float m_jumpForce; //ジャンプ力.
     [SerializeField] private float m_slideSpeed; //滑り落ちるときのスピード.
+    [SerializeField] private float m_knockBackSpeed;
+    [SerializeField] private float m_knockBackDictance;
     [SerializeField] PlayerColliderDetector m_colDetect; //接地判定,壁との接触判定,天井との接触判定.
     [SerializeField] CapsuleCollider2D m_characterCollider; //プレイヤーの当たり判定.
     [SerializeField] AudioClip m_footStepSE_1;
@@ -16,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] AudioClip m_clear;
 
     private AudioSource m_audioSource;
+    private PlayerAnimation m_playerAnimation;
 
     private Vector2 m_defCharColOffset; //プレイヤーコライダーのoffsetの初期値.
     private Vector2 m_defCharColSize; //プレイヤーコライダーのサイズの初期値.
@@ -38,6 +41,7 @@ public class PlayerController : MonoBehaviour
     private bool m_canStanding; //しゃがみ解除可能フラグ.
     private bool m_hitWall; //壁との接触検知フラグ.
     private float m_allowedDist; //壁までの距離制限.
+    private bool m_canMove = true;
 
     public Vector2 InputMove => m_inputMove;
     public float MoveSpeed => m_moveSpeed;
@@ -45,13 +49,16 @@ public class PlayerController : MonoBehaviour
     public bool PressCrouch => m_pressCrouch;
     public bool IsCrouch => m_isCrouch;
 
+    private void Awake()
+    {
+        m_rb2D = GetComponent<Rigidbody2D>();
+        m_audioSource = GetComponent<AudioSource>();
+        m_playerAnimation = GetComponent<PlayerAnimation>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        //必要な要素を参照.
-        m_rb2D = GetComponent<Rigidbody2D>();
-        m_audioSource = GetComponent<AudioSource>();
-
         //初期状態の値を保存.
         m_defCharColOffset = new Vector2(m_characterCollider.offset.x, m_characterCollider.offset.y);
         m_defCharColSize = new Vector2(m_characterCollider.size.x, m_characterCollider.size.y);
@@ -123,10 +130,8 @@ public class PlayerController : MonoBehaviour
     //プレイヤーを移動させる.
     void MovingPlayer()
     {
-        if (m_inSlope == true)
-        {
+        if (m_inSlope == true || m_canMove==false)
             return;
-        }
 
         if (m_hitWall == false || //移動方向に壁がない.
             m_allowedDist > 0 ) //移動可能距離が0以上.
@@ -311,5 +316,37 @@ public class PlayerController : MonoBehaviour
         {
             m_pressCrouch = false;
         }
+    }
+
+    public void KnockBackPlayer()
+    {
+        m_playerAnimation.KnockBackAnim();
+        StartCoroutine(KnockBack());
+    }
+
+    //アニメーションに合わせて少し後退させる.
+    private IEnumerator KnockBack()
+    {
+        m_canMove = false;
+
+        Vector3 back = -transform.forward;
+        Vector3 startPos = transform.position;
+        Vector3 target = startPos - transform.forward * m_knockBackDictance;
+
+        while (Vector3.Distance(transform.position, target) > 0.01f)
+        {
+            transform.position = Vector3.MoveTowards(
+                transform.position,
+                target,
+                m_knockBackSpeed * Time.deltaTime
+                );
+
+            yield return null;
+        }
+    }
+
+    public void FinishStanding()
+    {
+        m_canMove = true;
     }
 }

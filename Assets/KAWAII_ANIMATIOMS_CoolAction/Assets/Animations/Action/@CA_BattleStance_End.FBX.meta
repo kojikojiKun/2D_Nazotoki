@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 290c97e57c54d6240b7f17e995e39e34
 ModelImporter:
-  serializedVersion: 22200
+  serializedVersion: 24200
   internalIDToNameTable: []
   externalObjects: {}
   materials:
@@ -17,12 +17,7 @@ ModelImporter:
     removeConstantScaleCurves: 0
     motionNodeName: 
     animationImportErrors: 
-    animationImportWarnings: "\nClip 'Unreal Take' has import animation warnings
-      that might lower retargeting quality:\nNote: Activate translation DOF on avatar
-      to improve retargeting quality.\n\t'Spine' has translation animation that will
-      be discarded.\n\t'Neck' has translation animation that will be discarded.\n\t'Shoulder_L'
-      has translation animation that will be discarded.\n\t'Shoulder_R' has translation
-      animation that will be discarded.\n"
+    animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -61,6 +56,9 @@ ModelImporter:
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
     optimizeBones: 1
+    generateMeshLods: 0
+    meshLodGenerationFlags: 0
+    maximumMeshLod: -1
     meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
@@ -789,7 +787,8 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 3da7ead236f1f7446b2e9cf3bf16ae68, type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 3da7ead236f1f7446b2e9cf3bf16ae68,
+    type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
@@ -801,3 +800,10 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323032
+  packageName: KAWAII ANIMATIONS Cool Action
+  packageVersion: 
+  assetPath: Assets/KAWAII_ANIMATIOMS_CoolAction/Assets/Animations/Action/@CA_BattleStance_End.FBX
+  uploadId: 0

@@ -790,7 +790,8 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 3da7ead236f1f7446b2e9cf3bf16ae68, type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 3da7ead236f1f7446b2e9cf3bf16ae68,
+    type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
@@ -802,3 +803,10 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323032
+  packageName: KAWAII ANIMATIONS Cool Action
+  packageVersion: 
+  assetPath: Assets/KAWAII_ANIMATIOMS_CoolAction/Assets/Animations/Ladder/@CA_LadderClimb_JumpRight_End.FBX
+  uploadId: 0

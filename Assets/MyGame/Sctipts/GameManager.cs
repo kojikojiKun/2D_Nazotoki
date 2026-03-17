@@ -7,7 +7,6 @@ using UnityEngine.InputSystem;
 public class GameManager : MonoBehaviour
 {
     public static GameManager s_instance;
-    public const string HAS_LANCHED = "HasLanched";
 
     [System.Serializable]
     private struct SceneBGM
@@ -22,6 +21,7 @@ public class GameManager : MonoBehaviour
     Transform m_respownPos;
     GameObject m_clearWindow;
     PlayerController m_playerCntl;
+    public PlayerController PlayerController => m_playerCntl;
     PlayerInput m_playerInput;
     
     const string m_titleSceneName = "Title";

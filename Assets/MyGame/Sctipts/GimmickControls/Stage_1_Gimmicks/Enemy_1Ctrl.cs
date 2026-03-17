@@ -3,27 +3,39 @@ using UnityEngine.InputSystem;
 
 public class Enemy_1Ctrl : MonoBehaviour
 {    
-    [SerializeField] PlayerController m_playerController;
+    
     [SerializeField] GameObject m_tentacle;
     [SerializeField] CameraController m_camera;
     [SerializeField] Transform m_FixedCameraPos;
+    PlayerController m_playerController;
     Animator m_animator;
     PlayerInput m_playerInput;
     Rigidbody2D m_playerRb;
     private bool m_isCatch=false;
-    public bool CanMove = true;
+
+    private void Awake()
+    {
+        m_animator = GetComponent<Animator>();
+    }
 
     private void Start()
     {
-        m_animator = GetComponent<Animator>();
-        m_playerInput = m_playerController.GetComponent<PlayerInput>();
-        m_playerRb = m_playerController.GetComponent<Rigidbody2D>();
+        if (GameManager.s_instance.PlayerController != null)
+        {
+            m_playerController = GameManager.s_instance.PlayerController;
+            m_playerInput = m_playerController.GetComponent<PlayerInput>();
+            m_playerRb = m_playerController.GetComponent<Rigidbody2D>();
+        }
     }
 
     private void Update()
     {
-        if (!CanMove)
-            return;
+        if (m_playerController == null)
+        {
+            m_playerController = GameManager.s_instance.PlayerController;
+            m_playerInput = m_playerController.GetComponent<PlayerInput>();
+            m_playerRb = m_playerController.GetComponent<Rigidbody2D>();
+        }
 
         if(m_isCatch)
         {
@@ -35,14 +47,25 @@ public class Enemy_1Ctrl : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            Attack();
+            AttackAnim();
         }
     }
 
     //プレイヤーを攻撃.
-    void Attack()
+    void AttackAnim()
     {
         m_animator.SetTrigger("attack");
+    }
+
+    public void FreezeAnim()
+    {
+        m_animator.SetBool("isFreeze", true);
+        m_animator.SetTrigger("freeze");
+    }
+
+    public void DeFrostAnim()
+    {
+        m_animator.SetBool("isFreeze", false);
     }
 
     //プレイヤーを触手のアニメーションに応じて移動させる.

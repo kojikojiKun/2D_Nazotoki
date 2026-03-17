@@ -789,7 +789,8 @@ ModelImporter:
     hasTranslationDoF: 1
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: d5317c42c7d79dd41b326383ba7a0871, type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: d5317c42c7d79dd41b326383ba7a0871,
+    type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
@@ -801,3 +802,10 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323032
+  packageName: KAWAII ANIMATIONS Cool Action
+  packageVersion: 
+  assetPath: Assets/KAWAII_ANIMATIOMS_CoolAction/Assets/Animations/Idle/@CA_Idle02_LookAround.FBX
+  uploadId: 0

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -21,19 +20,6 @@ public class SceneController : MonoBehaviour
 
         m_audioSource = GetComponent<AudioSource>();
     }
-
-    public void StartGame()
-    {
-        if (PlayerPrefs.HasKey(GameManager.HAS_LANCHED))
-        {
-            StartCoroutine(LoadSceneWithSE("SelectStage"));
-        }
-        else
-        {
-            StartCoroutine(LoadSceneWithSE("Tutolial"));
-        }
-    }
-
 
     public void LoadTitle()
     {

@@ -12,13 +12,11 @@ public class FreezeEnemyGimmick : MonoBehaviour
 
     BaseGimmickCtrl m_gimmickCtrl;
     Enemy_1Ctrl m_enemyCtrl;
-    Animator m_enemyAnimator;
 
     private void Awake()
     {
         m_gimmickCtrl = GetComponent<BaseGimmickCtrl>();
         m_enemyCtrl = m_enemy.GetComponent<Enemy_1Ctrl>();
-        m_enemyAnimator = m_enemy.GetComponent<Animator>();
     }
 
     private void Start()
@@ -50,14 +48,12 @@ public class FreezeEnemyGimmick : MonoBehaviour
 
     void FreezeEnemy()
     {
-        m_enemyAnimator.enabled = false;
-        m_enemyCtrl.CanMove = false;
+        m_enemyCtrl.FreezeAnim();
     }
 
     void DeFrostEnemy()
     {
-        m_enemyAnimator.enabled = true;
-        m_enemyCtrl.CanMove = true;
+        m_enemyCtrl.DeFrostAnim();
     }
 
     void ChangeWaterMaterialBrihgtness()

@@ -8,7 +8,6 @@ public class PlayerAnimation : MonoBehaviour
     PlayerController m_playerController;
 
     private Vector2 m_inputMove; //入力値.
-    private float m_moveSpeedX; //x軸方向の移動速度.
     private bool m_isJumping;
     private bool m_isGrounded;
     private bool m_isGroundedPrev;
@@ -99,6 +98,11 @@ public class PlayerAnimation : MonoBehaviour
             }
         }
         m_isGroundedPrev = m_isGrounded;
+    }
+
+    public void KnockBackAnim()
+    {
+        m_animator.SetTrigger("knockBack");
     }
 
     //ステージクリア時のアニメーションを再生.

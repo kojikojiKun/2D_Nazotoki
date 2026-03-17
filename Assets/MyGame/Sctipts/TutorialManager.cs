@@ -39,14 +39,6 @@ public class TutorialManager : MonoBehaviour
 
         m_clearButton.onClick.AddListener(() =>
         {
-            Debug.Log(GameManager.HAS_LANCHED);
-            int a = PlayerPrefs.GetInt(GameManager.HAS_LANCHED, 0);
-            Debug.Log(a);
-            //チュートリアルをクリアしたことを保存.
-            PlayerPrefs.SetInt(GameManager.HAS_LANCHED, 1);
-            PlayerPrefs.Save();
-
-            //ステージ選択に遷移.
             SceneController.s_instance.LoadSelectStage();
         });
     }
