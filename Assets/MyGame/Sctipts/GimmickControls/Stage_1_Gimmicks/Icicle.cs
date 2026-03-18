@@ -6,45 +6,72 @@ public class Icicle : MonoBehaviour
     [SerializeField] private float m_targetScale;
     [SerializeField] private float m_startScale;
     [SerializeField] private float m_enlargeMag;
+    [SerializeField] private float m_fallDistance;
     private float m_currentScale;
     private float m_interpolation = 0;
-
+    private float m_totalFall = 0;
+    private Transform m_lastPos;
     Rigidbody2D m_rb2D;
+    Coroutine m_coroutine;
 
     private void Awake()
     {
         m_rb2D = GetComponent<Rigidbody2D>();
+        m_lastPos = this.transform;
     }
 
-    private void Start()
+    private void Update()
     {
-        StartEnlarge();
+        //óéâ∫ãóó£ÇåvéZ.
+        float distance = Vector3.Distance(this.transform.position, m_lastPos.position);
+        m_totalFall += distance;
+        m_lastPos = this.transform;
+
+        if (IsMoveToLimit() == true)
+            this.gameObject.SetActive(false);
+    }
+
+    public bool IsMoveToLimit()
+    {
+        return m_totalFall >= m_fallDistance;
     }
 
     public void StartEnlarge()
     {
-        m_rb2D.gravityScale = 0;
-        StartCoroutine(EnlargeIcicle());    
+        if (m_coroutine != null)
+            StopCoroutine(m_coroutine);
+
+        m_coroutine = StartCoroutine(EnlargeIcicle());    
     }
 
     private IEnumerator EnlargeIcicle()
     {
-        while ((m_targetScale - m_currentScale) >= 0.01f)
+        m_rb2D.gravityScale = 0;
+        m_interpolation = 0;
+        m_currentScale = m_startScale;
+        m_totalFall = 0;
+        
+        //ScaleÇèôÅXÇ…ëùâ¡.
+        while (m_interpolation < 1f)
         {
             m_interpolation += Time.deltaTime * m_enlargeMag;
             m_currentScale = Mathf.Lerp(m_startScale, m_targetScale, m_interpolation);
-            transform.localScale = new Vector3(m_currentScale, m_currentScale, m_currentScale);
+            transform.localScale = Vector3.one * m_currentScale;
 
             yield return null;
         }
 
-        yield return new WaitForSeconds(0.1f);
-        
+        transform.localScale = Vector3.one * m_targetScale;
+
+        yield return new WaitForSeconds(1f);
         m_rb2D.gravityScale = 1;
+
+        m_coroutine = null;
     }
 
-    public void InitializeScale()
+    public void Initialize(Transform setPos)
     {
+        transform.position = setPos.position;
         transform.localScale = new Vector3(m_startScale, m_startScale, m_startScale);
     }
 
@@ -52,8 +79,7 @@ public class Icicle : MonoBehaviour
     {
         if (other.CompareTag("enemy") || other.CompareTag("Player"))
         {
-            InitializeScale();
-            this.gameObject.SetActive(false);
+            this.gameObject.SetActive(false);        
         }
     }
 }

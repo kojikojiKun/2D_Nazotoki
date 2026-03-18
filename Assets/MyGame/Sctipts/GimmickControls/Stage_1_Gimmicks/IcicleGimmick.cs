@@ -3,12 +3,11 @@ using System.Collections;
 
 public class IcicleGimmick : MonoBehaviour
 {
-    [SerializeField] Icicle[] m_icicle;
+    [SerializeField] Icicle m_icicle;
     [SerializeField] private float m_generateInterval;
-    [SerializeField] Transform m_generatePos;
+    [SerializeField] Transform[] m_generatePos;
     BaseGimmickCtrl m_gimmickCtrl;
-
-    private bool m_isGenerated = false;
+    Coroutine m_coroutine;
 
     private void Awake()
     {
@@ -17,10 +16,7 @@ public class IcicleGimmick : MonoBehaviour
 
     private void Start()
     {
-        for(int i=0; i < m_icicle.Length; i++)
-        {
-            m_icicle[i].gameObject.SetActive(false);
-        }
+        m_icicle.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -28,20 +24,29 @@ public class IcicleGimmick : MonoBehaviour
         if (!m_gimmickCtrl.IsGimmickActive())
             return;
 
-        if (m_gimmickCtrl.CurrentWeather == WeatherManager.WeatherType.snow && m_isGenerated==true)
+        if (m_gimmickCtrl.CurrentWeather == WeatherManager.WeatherType.snow)
         {
-            m_isGenerated = false;
-            StartCoroutine(GenerateIcicle());
+            if (m_coroutine == null)
+            {
+                m_coroutine = StartCoroutine(ActiveIcicle());
+            }
         }
     }
 
-    private IEnumerator GenerateIcicle()
+    //一定時間ごとにオブジェクトActive
+    private IEnumerator ActiveIcicle()
     {
-        yield return new WaitForSeconds(m_generateInterval);
-        int random = Random.Range(0, m_icicle.Length);
+        while (true)
+        {
+            yield return new WaitForSeconds(m_generateInterval);
 
-        m_icicle[random].gameObject.SetActive(true);
-        m_icicle[random].StartEnlarge();
-        m_isGenerated = true;
+            int random = Random.Range(0, m_generatePos.Length);
+
+            m_icicle.Initialize(m_generatePos[random]);
+            m_icicle.gameObject.SetActive(true);
+
+            if(m_icicle.IsMoveToLimit()==true)
+            m_icicle.StartEnlarge();
+        }
     }
 }
