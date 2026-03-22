@@ -117,7 +117,8 @@ public class PlayerController : MonoBehaviour
     //移動入力受け取り.
     public void OnMove(InputAction.CallbackContext context)
     {
-        m_inputMove = context.ReadValue<Vector2>();
+        if (m_canMove == true)
+            m_inputMove = context.ReadValue<Vector2>();
     }
 
     //壁との接触情報を受け取る.
@@ -329,6 +330,7 @@ public class PlayerController : MonoBehaviour
     {
         m_canMove = false;
 
+        m_inputMove = Vector2.zero;
         Vector3 back = -transform.forward;
         Vector3 startPos = transform.position;
         Vector3 target = startPos - transform.forward * m_knockBackDictance;

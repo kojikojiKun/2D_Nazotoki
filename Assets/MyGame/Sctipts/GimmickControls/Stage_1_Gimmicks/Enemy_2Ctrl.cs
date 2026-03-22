@@ -1,9 +1,13 @@
+using System.Collections;
 using UnityEngine;
 
 public class Enemy_2Ctrl : MonoBehaviour
 {
+    [SerializeField] ParticleSystem m_particle;
+    [SerializeField] Transform m_moveParticlePos;
     private Animator m_animator;
     private PlayerController m_playerController;
+    private bool m_isDead = false;
 
     private void Awake()
     {
@@ -36,7 +40,24 @@ public class Enemy_2Ctrl : MonoBehaviour
 
     void AttackAnim()
     {
-        m_animator.SetTrigger("attack");
+        if (m_isDead == false)
+            m_animator.SetTrigger("attack");
+    }
+
+    public void Die()
+    {
+        StartCoroutine(OnDie());
+    }
+
+    private IEnumerator OnDie()
+    {
+        m_isDead = true;
+        m_animator.SetTrigger("die");
+        m_particle.gameObject.transform.position = m_moveParticlePos.position;
+
+        yield return new WaitForSeconds(1f);
+
+        this.gameObject.SetActive(false);
     }
 
     public void AttackPlayer()
